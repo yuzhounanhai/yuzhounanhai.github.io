@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>南海の笔记</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="敲重点，只是笔记啦！">
+<meta name="keywords" content="前端;JavaScript;CSS;JS;HTML;ES6">
+<meta property="og:type" content="website">
+<meta property="og:title" content="南海の笔记">
+<meta property="og:url" content="https://yuzhounanhai.github.io/index.html">
+<meta property="og:site_name" content="南海の笔记">
+<meta property="og:description" content="敲重点，只是笔记啦！">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="南海の笔记">
+<meta name="twitter:description" content="敲重点，只是笔记啦！">
+  
+    <link rel="alternate" href="/atom.xml" title="南海の笔记" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">南海の笔记</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">在海的南边，有一片宇宙！宇宙无垠，而探索无尽，是该同懒癌佛系奋斗！</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://yuzhounanhai.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-简单实现虚拟Dom与Diff算法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/简单实现虚拟Dom与Diff算法/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.740Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/29/简单实现虚拟Dom与Diff算法/">简单实现虚拟DOM与Diff算法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <h2 id="什么是虚拟Dom"><a href="#什么是虚拟Dom" class="headerlink" title="什么是虚拟Dom"></a>什么是虚拟Dom</h2><p>虚拟 Dom（virtual Dom）正如其名，它并不是真正的 Dom 对象，但可以根据虚拟 Dom 来转换为真正的 Dom 对象。</p>
+<p>虚拟 Dom 其实是一个 JavaScript 对象，对于下面所示的 Dom 结构：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"lists"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>1<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item"</span>&gt;</span>2<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>3<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>该 Dom 结构所对应的 JavaScript 对象可以是这样的：</p>
+        
+        
+          <p class="article-more-link">
+            <a href="/2019/09/29/简单实现虚拟Dom与Diff算法/#more">查看更多</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/简单实现虚拟Dom与Diff算法/" data-title="简单实现虚拟DOM与Diff算法" data-id="ckem6w7qi002ck8vxfcjgwz0z" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原理/">原理</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-浅析VUE双向绑定原理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/浅析VUE双向绑定原理/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.739Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/29/浅析VUE双向绑定原理/">浅析VUE双向绑定原理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <p>VUE 是一种基于数据截获来实现双向绑定的，这篇文章将浅显的分析一下 VUE 是如何实现双向绑定的，并根据原理，简要实现这部分代码。</p>
+<h2 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h2><p>MVVM 目前是一种前端开发的架构模式，其三个组成部分是模型（Model）、视图（View）、视图模型（View Model）。<br>MVVM 使视图和逻辑得以分开，交由视图模型统一管理，由数据驱动视图模型更新，从而影响视图更新；<br>而交互所造成的变动，也将反应在视图模型上。</p>
+        
+        
+          <p class="article-more-link">
+            <a href="/2019/09/29/浅析VUE双向绑定原理/#more">查看更多</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/浅析VUE双向绑定原理/" data-title="浅析VUE双向绑定原理" data-id="ckem6w7ps001sk8vxuevqyuwm" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vue/">Vue</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-深入了解AJAX" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/深入了解AJAX/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.739Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/29/深入了解AJAX/">深入了解AJAX</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <p>AJAX允许浏览器在无需刷新的情况下，异步的更新界面。</p>
+<h2 id="AJAX的特点"><a href="#AJAX的特点" class="headerlink" title="AJAX的特点"></a>AJAX的特点</h2><ul>
+<li><p>无刷新的更新数据</p>
+</li>
+<li><p>与服务器进行异步通信</p>
+</li>
+<li><p>破坏了浏览器机制<br>  在无刷新更新页面数据的情况下，用户无法返回上一个页面状态，因为浏览器仅能记忆历史记录中的静态页面。</p>
+</li>
+<li><p>安全问题<br>  伪造AJAX请求的方式引发了一定的安全问题，不要认为每个请求都是真实合理的，例如用户可以自行发送AJAX请求到服务器端，从而绕过前端的数据检查。针对这一问题，需要在服务器端保留数据的逻辑验证。其次的安全问题一般有sql注入、跨站信息伪造等等。</p>
+        
+        
+          <p class="article-more-link">
+            <a href="/2019/09/29/深入了解AJAX/#more">查看更多</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/深入了解AJAX/" data-title="深入了解AJAX" data-id="ckem6w7p8001ak8vxk74bs1bp" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/">http</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-浅析Redux实现原理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/浅析Redux实现原理/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.738Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/29/浅析Redux实现原理/">浅析Redux实现原理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <p><em>本文整理自 <a href="http://www.broadview.com.cn/book/5012" target="_blank" rel="noopener">React状态管理与同构实战</a> 一书，部分内容略有不同。若您对更多内容感兴趣，可以尝试购买。</em></p>
+<p>如若你还不了解 Redux 的一些基本要素，你可以去阅读我的 <a href="https://yuzhounanhai.github.io/2019/07/13/%E5%88%9D%E8%AF%86Redux/">初识Redux</a> 一文。</p>
+<h2 id="Store-的实现"><a href="#Store-的实现" class="headerlink" title="Store 的实现"></a>Store 的实现</h2><p>Store 不是类。它只是有几个方法的对象。这些方法在 <a href="https://yuzhounanhai.github.io/2019/07/13/%E5%88%9D%E8%AF%86Redux/">初识Redux</a> 一文中有介绍过。（你也可以去阅读 Redux 文档中关于 Store 的定义，点击 <a href="https://www.redux.org.cn/docs/api/Store.html" target="_blank" rel="noopener">这里</a> ）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">store = (</span><br><span class="line">    dispatch,</span><br><span class="line">    getState,</span><br><span class="line">    subscribe,</span><br><span class="line">    replaceReducer</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们使用 <code>createStore()</code> 这一个 API 来创建 store 对象，因此我们将从这个方法入手。（<a href="https://www.redux.org.cn/docs/api/createStore.html" target="_blank" rel="noopener">阅读 createStore API</a>）关于 <code>createStore()</code> 方法的定义如下：</p>
+        
+        
+          <p class="article-more-link">
+            <a href="/2019/09/29/浅析Redux实现原理/#more">查看更多</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/浅析Redux实现原理/" data-title="浅析Redux实现原理" data-id="ckem6w7p60018k8vxjv5smvlk" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redux/">Redux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-实现符合promisea+规范" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/实现符合promisea+规范/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.737Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/29/实现符合promisea+规范/">实现符合Promise A+规范的promise</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <h2 id="promise的简单使用"><a href="#promise的简单使用" class="headerlink" title="promise的简单使用"></a>promise的简单使用</h2><p>promise是异步的解决方案之一，可以通过实例化 Promise 类，并传入一个 executor 来进行使用。<br>executor 是一个函数，该函数的两个参数分别是 resolve 和 reject 。它们是两个由 JavaScript 引擎提供的函数。分别用以成功回调以及错误回调。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="comment">/*异步操作成功*/</span>) &#123;</span><br><span class="line">        resolve(value);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        reject(error);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+        
+        
+          <p class="article-more-link">
+            <a href="/2019/09/29/实现符合promisea+规范/#more">查看更多</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/实现符合promisea+规范/" data-title="实现符合Promise A+规范的promise" data-id="ckem6w7pp001pk8vx7e82lmae" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原理/">原理</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-原生AJAX编写入门" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/原生AJAX编写入门/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.737Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/29/原生AJAX编写入门/">原生AJAX编写入门</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <p>AJAX（Asynchronous Javascript And XML，异步Javascript和XML）是一种无需重新加载整个网页的情况下，能够更新部分网页的技术。</p>
+<p>AJAX是通过核心对象XMLHttpRequest，使用Javascript向服务器提出请求，并处理响应。</p>
+<h2 id="AJAX请求分析"><a href="#AJAX请求分析" class="headerlink" title="AJAX请求分析"></a>AJAX请求分析</h2><p>一般的，我们在AJAX的使用上，习惯性的将请求链接、请求方法、回调函数等封装成一个对象，若AJAX请求成功，将触发对象中的成功回调函数。即我们的使用是这样的：</p>
+        
+        
+          <p class="article-more-link">
+            <a href="/2019/09/29/原生AJAX编写入门/#more">查看更多</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/原生AJAX编写入门/" data-title="原生AJAX编写入门" data-id="ckem6w7p40017k8vxxyhqkxi5" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/">http</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-初识Redux" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/初识Redux/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.736Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/29/初识Redux/">初识Redux</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <h2 id="Redux定义"><a href="#Redux定义" class="headerlink" title="Redux定义"></a>Redux定义</h2><blockquote>
+<p>Redux is a predictable state container for JavaScript apps.<br>对于 JavaScript 应用而言， Redux 是一个可预测状态的“容器”.</p>
+</blockquote>
+<p>上面的定义，是 Redux 官方给出的，你可以片面的将 Redux 理解为一个存储状态的容器（但并不仅仅是容器），但请不要忽略上面定义中的关键词：可预测状态。</p>
+<blockquote>
+<p>Redux 是库结合模式</p>
+</blockquote>
+<p>Redux 是一个库，这个库体积很小，并且库内的实现十分优雅。但 Redux 与传统的库不同，它在提供方法使用的同时，限制了一部分内容，在这一层面上，它又像是一种设计模式。因此，不妨将 Redux 理解成一个严格规定了使用模式的库。</p>
+        
+        
+          <p class="article-more-link">
+            <a href="/2019/09/29/初识Redux/#more">查看更多</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/初识Redux/" data-title="初识Redux" data-id="ckem6w7nt0009k8vxpk7pooij" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redux/">Redux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-一些原生小方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/一些原生小方法/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.735Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/29/一些原生小方法/">一些原生小方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <ul>
+<li>addClass<br>往node或者nodelist中添加class<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addClass</span>(<span class="params">$els, classNames</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">addOneClass</span>(<span class="params">$el, classNames</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> resultClass = $el.className.split(<span class="string">" "</span>);</span><br><span class="line">        <span class="keyword">var</span> newClassNames = classNames.split(<span class="string">" "</span>);</span><br><span class="line">        newClassNames.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">newClass</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (resultClass.indexOf(newClass) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                resultClass.push(newClass);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        $el.className = resultClass.join(<span class="string">" "</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ($els <span class="keyword">instanceof</span> Node) &#123;</span><br><span class="line">        addOneClass($els, classNames);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; $els.length; i++) &#123;</span><br><span class="line">            addOneClass($els[i], classNames);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+        
+        
+          <p class="article-more-link">
+            <a href="/2019/09/29/一些原生小方法/#more">查看更多</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/一些原生小方法/" data-title="一些原生小方法" data-id="ckem6w7np0005k8vxcd2t4jif" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-webpack原理及优化" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/webpack原理及优化/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.735Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/29/webpack原理及优化/">Webpack原理及优化</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <p>Webpack 是一个黑盒，内部有其自我的一套运行流程，开发人员无需关注其内部做了什么，仅需通过 Webpack 所暴露出的配置字段进行配置，即可达到模块打包的目的。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><ul>
+<li><p>Entry 入口， webpack 执行构建的第一步将从 Entry 开始，可抽象成输入。</p>
+</li>
+<li><p>Module 模块，在 webpack 里一切皆模块， 一个模块对应一个文件。 Webpack 会从配置的 Entry 开始，递归找出所有依赖的模块。</p>
+</li>
+<li><p>Chunk 代码块 Chunk 由多个模块组合而成，用于代码合并与分割。</p>
+</li>
+<li><p>Loader 模块转换器，用于将模块的原内容按照需求转换成新内容。</p>
+</li>
+<li><p>Plugin 扩展插件，在 Webpack 构建流程中的特定时机会广播对应的事件，插件可以监听这些事件的发生，在特定的时机做对应的事情</p>
+</li>
+</ul>
+        
+        
+          <p class="article-more-link">
+            <a href="/2019/09/29/webpack原理及优化/#more">查看更多</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/webpack原理及优化/" data-title="Webpack原理及优化" data-id="ckem6w7nq0006k8vxi6m0o3dv" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Webpack/">Webpack</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-React新生命周期" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/React新生命周期/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.734Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/29/React新生命周期/">React v16.3 新生命周期</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <p>React打算在 v17 版本推出新的 Async Rendering，提出一种可被打断的生命周期的形式，并在 v16 版本中为即将上线的这一功能做出兼容升级。（生命周期一旦被打断，下次恢复的时候又会再跑一次之前的生命周期，因此 <code>componentWillMount</code>，<code>componentWillReceiveProps</code>， <code>componentWillUpdate</code> 都不能保证只在挂载/拿到props/状态变化的时候刷新一次）</p>
+<h2 id="不安全的生命周期"><a href="#不安全的生命周期" class="headerlink" title="不安全的生命周期"></a>不安全的生命周期</h2><p>随着 React 团队在 v17 版本推出的新功能上的实践，发现一些生命周期可能会带来一些危险性，这些生命周期方法经常被误解和巧妙地误用；此外，React 团队预计，对于异步渲染，它们潜在的误用可能会造成更多问题。v16.3版本发布后，官方文档中已经为这些容易出现问题的生命周期添加了 “<code>UNSAFE_</code>” 前缀。</p>
+<p>这些生命周期是：</p>
+<ul>
+<li>componentWillMount</li>
+<li>componentWillReceiveProps</li>
+<li>componentWillUpdate</li>
+</ul>
+        
+        
+          <p class="article-more-link">
+            <a href="/2019/09/29/React新生命周期/#more">查看更多</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/React新生命周期/" data-title="React v16.3 新生命周期" data-id="ckem6w7oj000wk8vx8by8mrtk" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">下一页 &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  <div class="github-card" data-github="yuzhounanhai" data-width="100%" data-height="" data-theme="default"></div>
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/其他/">其他</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络通信/">网络通信</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/">JS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LeetCode解题/">LeetCode解题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TS/">TS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Webpack/">Webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原理/">原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JS/" style="font-size: 20px;">JS</a> <a href="/tags/LeetCode解题/" style="font-size: 12.5px;">LeetCode解题</a> <a href="/tags/React/" style="font-size: 15px;">React</a> <a href="/tags/Redux/" style="font-size: 12.5px;">Redux</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/http/" style="font-size: 15px;">http</a> <a href="/tags/原理/" style="font-size: 17.5px;">原理</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/09/29/简单实现虚拟Dom与Diff算法/">简单实现虚拟DOM与Diff算法</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/浅析VUE双向绑定原理/">浅析VUE双向绑定原理</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/深入了解AJAX/">深入了解AJAX</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/浅析Redux实现原理/">浅析Redux实现原理</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/实现符合promisea+规范/">实现符合Promise A+规范的promise</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 宇宙南海<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    
+
+<script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

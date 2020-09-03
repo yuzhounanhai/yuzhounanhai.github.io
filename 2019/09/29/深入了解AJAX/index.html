@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>深入了解AJAX | 南海の笔记</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="AJAX允许浏览器在无需刷新的情况下，异步的更新界面。 AJAX的特点 无刷新的更新数据  与服务器进行异步通信  破坏了浏览器机制  在无刷新更新页面数据的情况下，用户无法返回上一个页面状态，因为浏览器仅能记忆历史记录中的静态页面。  安全问题  伪造AJAX请求的方式引发了一定的安全问题，不要认为每个请求都是真实合理的，例如用户可以自行发送AJAX请求到服务器端，从而绕过前端的数据检查。针对这">
+<meta name="keywords" content="JS,http">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入了解AJAX">
+<meta property="og:url" content="https://yuzhounanhai.github.io/2019/09/29/深入了解AJAX/index.html">
+<meta property="og:site_name" content="南海の笔记">
+<meta property="og:description" content="AJAX允许浏览器在无需刷新的情况下，异步的更新界面。 AJAX的特点 无刷新的更新数据  与服务器进行异步通信  破坏了浏览器机制  在无刷新更新页面数据的情况下，用户无法返回上一个页面状态，因为浏览器仅能记忆历史记录中的静态页面。  安全问题  伪造AJAX请求的方式引发了一定的安全问题，不要认为每个请求都是真实合理的，例如用户可以自行发送AJAX请求到服务器端，从而绕过前端的数据检查。针对这">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190703/ajax_level.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190703/ajax_step.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190703/ajax_status_step.png">
+<meta property="og:updated_time" content="2019-09-29T07:59:45.739Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入了解AJAX">
+<meta name="twitter:description" content="AJAX允许浏览器在无需刷新的情况下，异步的更新界面。 AJAX的特点 无刷新的更新数据  与服务器进行异步通信  破坏了浏览器机制  在无刷新更新页面数据的情况下，用户无法返回上一个页面状态，因为浏览器仅能记忆历史记录中的静态页面。  安全问题  伪造AJAX请求的方式引发了一定的安全问题，不要认为每个请求都是真实合理的，例如用户可以自行发送AJAX请求到服务器端，从而绕过前端的数据检查。针对这">
+<meta name="twitter:image" content="https://yuzhounanhai.github.io/images/20190703/ajax_level.png">
+  
+    <link rel="alternate" href="/atom.xml" title="南海の笔记" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">南海の笔记</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">在海的南边，有一片宇宙！宇宙无垠，而探索无尽，是该同懒癌佛系奋斗！</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://yuzhounanhai.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-深入了解AJAX" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/深入了解AJAX/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.739Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      深入了解AJAX
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <p>AJAX允许浏览器在无需刷新的情况下，异步的更新界面。</p>
+<h2 id="AJAX的特点"><a href="#AJAX的特点" class="headerlink" title="AJAX的特点"></a>AJAX的特点</h2><ul>
+<li><p>无刷新的更新数据</p>
+</li>
+<li><p>与服务器进行异步通信</p>
+</li>
+<li><p>破坏了浏览器机制<br>  在无刷新更新页面数据的情况下，用户无法返回上一个页面状态，因为浏览器仅能记忆历史记录中的静态页面。</p>
+</li>
+<li><p>安全问题<br>  伪造AJAX请求的方式引发了一定的安全问题，不要认为每个请求都是真实合理的，例如用户可以自行发送AJAX请求到服务器端，从而绕过前端的数据检查。针对这一问题，需要在服务器端保留数据的逻辑验证。其次的安全问题一般有sql注入、跨站信息伪造等等。</p>
+<a id="more"></a>
+<h2 id="AJAX通信原理"><a href="#AJAX通信原理" class="headerlink" title="AJAX通信原理"></a>AJAX通信原理</h2></li>
+</ul>
+<p>AJAX是使用XMLHttpRequest对象发送http请求并接收响应。XMLHttpRequest是一个JS对象，可以使用JS对象的方法与事件。</p>
+<h2 id="AJAX浏览器兼容性"><a href="#AJAX浏览器兼容性" class="headerlink" title="AJAX浏览器兼容性"></a>AJAX浏览器兼容性</h2><p>AJAX浏览器兼容性表现在IE浏览器和其他浏览器对XMLHttpRequest这个对象的实现上。</p>
+<p>IE浏览器: ActiveXObject(‘Microsoft.XMLHTTP’)<br>其他浏览器: XMLHttpRequest</p>
+<h2 id="AJAX规范"><a href="#AJAX规范" class="headerlink" title="AJAX规范"></a>AJAX规范</h2><p>AJAX规范共分为两级。</p>
+<p><img src="/images/20190703/ajax_level.png" alt="ajax规范等级"></p>
+<p>AJAX一级存在着一些限制：</p>
+<ol>
+<li><p>受同源策略限制，不允许发送跨域请求；</p>
+</li>
+<li><p>只能发送文本数据；</p>
+</li>
+<li><p>无法获得进度信息，只能知晓AJAX请求是否完成。</p>
+</li>
+</ol>
+<p>AJAX二级优化了一级时存在的限制，同时新增了两个功能。</p>
+<ol>
+<li><p>允许发送跨域请求，将是否接收跨域请求交由服务器端判定;</p>
+</li>
+<li><p>除原本支持的文本数据外，还允许发送二进制数据（具体表现在图片、视频、音频上）；</p>
+</li>
+<li><p>解决了无法获得AJAX进度的问题。</p>
+</li>
+<li><p>新增formData对象，允许发送表单数据；</p>
+</li>
+<li><p>可以设置请求超时的超时时长。</p>
+</li>
+</ol>
+<h2 id="AJAX通信流程"><a href="#AJAX通信流程" class="headerlink" title="AJAX通信流程"></a>AJAX通信流程</h2><p><img src="/images/20190703/ajax_step.png" alt="ajax通信流程"></p>
+<p>AJAX的通信可以分为发送、监听、接收服务器响应数据三大步骤。</p>
+<ol>
+<li>发送</li>
+</ol>
+<p>这个阶段向服务器发起请求，请求的类型有GET\POST\HEAD\DELETE等。请求的同时会携带数据进行发送。</p>
+<ol start="2">
+<li>监听</li>
+</ol>
+<p>发送请求后，AJAX处理器将进入监听状态，等待来自服务器的响应。</p>
+<ol start="3">
+<li>接收响应</li>
+</ol>
+<p>服务器一旦响应，意味着服务器端将告知本次AJAX请求处理后的结果，例如这是一个查询请求，那么服务器端响应的将是本次查询的结果；或者这是一个删除操作请求，那么服务器端响应的将是本次删除操作是否成功的一个结果。</p>
+<p>AJAX处理器将接收这个结果。</p>
+<h2 id="AJAX请求的连接状态"><a href="#AJAX请求的连接状态" class="headerlink" title="AJAX请求的连接状态"></a>AJAX请求的连接状态</h2><p>XMLHttpRequest对象的readyState记录了AJAX请求的连接状态。它有五个属性值：</p>
+<table>
+<thead>
+<tr>
+<th align="center">值</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0</td>
+<td align="center">未打开，请求未初始化</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">未发送，但服务器连接已经建立</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">请求已经接收，响应头和响应状态已经返回</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">请求处理，主要任务是下载响应体，此时responseText中已有部分内容</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">请求已完成，整个请求过程已经完毕</td>
+</tr>
+</tbody></table>
+<h2 id="XHR对象触发事件顺序"><a href="#XHR对象触发事件顺序" class="headerlink" title="XHR对象触发事件顺序"></a>XHR对象触发事件顺序</h2><h4 id="XHR部分代码实现"><a href="#XHR部分代码实现" class="headerlink" title="XHR部分代码实现"></a>XHR部分代码实现</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">interface XMLHttpRequestEventTarget : EventTarget &#123;</span><br><span class="line">	<span class="comment">// event handlers</span></span><br><span class="line">	attribute EventHandler onloadstart;</span><br><span class="line">	attribute EventHandler onprogress;</span><br><span class="line">	attribute EventHandler onabort;</span><br><span class="line">	attribute EventHandler onerror;</span><br><span class="line">	attribute EventHandler onload;</span><br><span class="line">	attribute EventHandler ontimeout;</span><br><span class="line">	attribute EventHandler onloadend;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">interface XMLHttpRequestUpload : XMLHttpRequestEventTarget &#123;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">interface XMLHttpRequest : XMLHttpRequestEventTarget &#123;</span><br><span class="line">	<span class="comment">// event handler</span></span><br><span class="line">	attribute EventHandler onreadystatechange;</span><br><span class="line">	readonly attribute XMLHttpRequestUpload upload;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>代码分析：</p>
+<ul>
+<li>onreadystatechange是XMLHttpRequest独有的事件</li>
+<li>XMLHttpRequest与XMLHttpRequestUpload都继承自XMLHttpRequestEventTarget，因此除了xhr之外，xhr内部定义的upload属性也具备XMLHttpRequestEventTarget所定义的七个事件。</li>
+</ul>
+<h4 id="XHR对象事件归纳"><a href="#XHR对象事件归纳" class="headerlink" title="XHR对象事件归纳"></a>XHR对象事件归纳</h4><p>由XHR接口的代码实现分析可得，XHR对象事件共包括以下几个：</p>
+<ol>
+<li><p>XHR自带事件</p>
+<ul>
+<li>xhr.onreadystatechange</li>
+</ul>
+</li>
+<li><p>XHR继承事件</p>
+<ul>
+<li>xhr.onloadstart</li>
+<li>xhr.onprogress</li>
+<li>xhr.onload</li>
+<li>xhr.onloadend</li>
+<li>xhr.onabort</li>
+<li>xhr.onerror</li>
+<li>xhr.ontimeout</li>
+</ul>
+</li>
+<li><p>XHR自带属性upload事件</p>
+<ul>
+<li>xhr.upload.onloadstart</li>
+<li>xhr.upload.onprogress</li>
+<li>xhr.upload.onload</li>
+<li>xhr.upload.onloadend</li>
+<li>xhr.upload.onabort</li>
+<li>xhr.upload.onerror</li>
+<li>xhr.upload.ontimeout</li>
+</ul>
+</li>
+</ol>
+<h4 id="事件触发条件"><a href="#事件触发条件" class="headerlink" title="事件触发条件"></a>事件触发条件</h4><table>
+<thead>
+<tr>
+<th align="left">事件</th>
+<th align="left">触发条件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">xhr.onreadystatechange</td>
+<td align="left">每当xhr.readyState改变时触发；但xhr.readyState由非0值变为0时不触发。</td>
+</tr>
+<tr>
+<td align="left">xhr.onloadstart</td>
+<td align="left">调用xhr.send()方法后立即触发，若xhr.send()未被调用则不会触发此事件。</td>
+</tr>
+<tr>
+<td align="left">xhr.upload.onprogress</td>
+<td align="left">在上传阶段，即xhr.send()之后，xhr.readystate=2之前触发，每50ms触发一次。</td>
+</tr>
+<tr>
+<td align="left">xhr.onprogress</td>
+<td align="left">在下载阶段，即xhr.readystate=3时触发，每50ms触发一次。</td>
+</tr>
+<tr>
+<td align="left">xhr.onload</td>
+<td align="left">当请求成功完成时触发，此时xhr.readystate=4</td>
+</tr>
+<tr>
+<td align="left">xhr.onloadend</td>
+<td align="left">当请求结束（包括请求成功和请求失败）时触发</td>
+</tr>
+<tr>
+<td align="left">xhr.onabort</td>
+<td align="left">当调用xhr.abort()后触发</td>
+</tr>
+<tr>
+<td align="left">xhr.ontimeout</td>
+<td align="left">xhr.timeout不等于0，由请求开始即onloadstart开始算起，当到达xhr.timeout所设置时间请求还未结束即onloadend，则触发此事件。</td>
+</tr>
+<tr>
+<td align="left">xhr.upload.onerror</td>
+<td align="left">若发生网络错误时，上传还没有结束，则会先触发该事件。</td>
+</tr>
+<tr>
+<td align="left">xhr.onerror</td>
+<td align="left">1. 在触发xhr.upload.onerror后，会触发xhr.onerror2. 若发生网络错误时，上传已经结束，则只会触发xhr.onerror3. 当且仅当发生网络错误时才会触发此事件，应用层错误（如状态码返回4XX）不会触发该事件。</td>
+</tr>
+</tbody></table>
+<h4 id="正常请求事件触发顺序"><a href="#正常请求事件触发顺序" class="headerlink" title="正常请求事件触发顺序"></a>正常请求事件触发顺序</h4><p><img src="/images/20190703/ajax_status_step.png" alt="ajax事件触发顺序">;</p>
+<p>当请求一切正常时，相关的事件触发顺序如下：</p>
+<ol>
+<li><p>触发xhr.onreadystatechange(之后每次readyState变化时，都会触发一次)</p>
+</li>
+<li><p>触发xhr.onloadstart</p>
+</li>
+</ol>
+<p>–上传阶段开始–</p>
+<ol start="3">
+<li><p>触发xhr.upload.onloadstart</p>
+</li>
+<li><p>触发xhr.upload.onprogress</p>
+</li>
+<li><p>触发xhr.upload.onload</p>
+</li>
+<li><p>触发xhr.upload.onloadend</p>
+</li>
+</ol>
+<p>–上传结束，下载阶段开始–</p>
+<ol start="7">
+<li><p>触发xhr.onprogress</p>
+</li>
+<li><p>触发xhr.onload</p>
+</li>
+<li><p>触发xhr.onloadend</p>
+</li>
+</ol>
+<h4 id="异常请求事件顺序"><a href="#异常请求事件顺序" class="headerlink" title="异常请求事件顺序"></a>异常请求事件顺序</h4><p>一旦发生abort或timeout或error异常：</p>
+<ol>
+<li><p>先立即中止当前请求</p>
+</li>
+<li><p>将 readystate 置为4，并触发xhr.onreadystatechange事件</p>
+</li>
+</ol>
+<p>如果上传阶段还没有结束，则依次触发以下事件：</p>
+<ol>
+<li><p>xhr.upload.onprogress</p>
+</li>
+<li><p>xhr.upload.[onabort或ontimeout或onerror]</p>
+</li>
+<li><p>xhr.upload.onloadend</p>
+</li>
+<li><p>触发xhr.onprogress事件</p>
+</li>
+<li><p>触发xhr.[onabort或ontimeout或onerror]事件</p>
+</li>
+<li><p>触发xhr.onloadend事件</p>
+</li>
+</ol>
+<h2 id="XHR对象常用属性"><a href="#XHR对象常用属性" class="headerlink" title="XHR对象常用属性"></a>XHR对象常用属性</h2><h4 id="xhr-readyState"><a href="#xhr-readyState" class="headerlink" title="xhr.readyState"></a>xhr.readyState</h4><p>XHR对象的状态，共有0-4五个值，分别表示XHR对象处于何种状态。</p>
+<h4 id="xhr-status"><a href="#xhr-status" class="headerlink" title="xhr.status"></a>xhr.status</h4><p>服务器返回的状态码，即响应结果码，例如200（ok）、404（not found）等。</p>
+<h4 id="xhr-statusText"><a href="#xhr-statusText" class="headerlink" title="xhr.statusText"></a>xhr.statusText</h4><p>服务器返回的状态文本，一般是状态码的含义，如ok、not found等。</p>
+<h4 id="xhr-responseText"><a href="#xhr-responseText" class="headerlink" title="xhr.responseText"></a>xhr.responseText</h4><p>服务器返回的文本数据。</p>
+<h4 id="xhr-responseXML"><a href="#xhr-responseXML" class="headerlink" title="xhr.responseXML"></a>xhr.responseXML</h4><p>服务器返回的XML数据。</p>
+<h2 id="XHR对象常用方法"><a href="#XHR对象常用方法" class="headerlink" title="XHR对象常用方法"></a>XHR对象常用方法</h2><h4 id="xhr-abort"><a href="#xhr-abort" class="headerlink" title="xhr.abort();"></a>xhr.abort();</h4><p>如果请求已经被发送,则立刻中止请求。</p>
+<h4 id="xhr-open-method-url-async-user-password"><a href="#xhr-open-method-url-async-user-password" class="headerlink" title="xhr.open(method,url, async, user, password);"></a>xhr.open(method,url, async, user, password);</h4><p>建立一个连接。</p>
+<h4 id="xhr-setRequestHeader-label-value"><a href="#xhr-setRequestHeader-label-value" class="headerlink" title="xhr.setRequestHeader(label,value);"></a>xhr.setRequestHeader(label,value);</h4><p>设置请求头，需要在send之前进行设置。</p>
+<h4 id="xhr-send-content"><a href="#xhr-send-content" class="headerlink" title="xhr.send(content);"></a>xhr.send(content);</h4><p>content只有在post请求时才生效。该方法用以发送请求。</p>
+<h4 id="xhr-getResponseHeader-headerName"><a href="#xhr-getResponseHeader-headerName" class="headerlink" title="xhr.getResponseHeader(headerName);"></a>xhr.getResponseHeader(headerName);</h4><p>根据headerName值获得指定响应头。</p>
+<h4 id="xhr-getAllResponseHeader"><a href="#xhr-getAllResponseHeader" class="headerlink" title="xhr.getAllResponseHeader();"></a>xhr.getAllResponseHeader();</h4><p>获得所有响应头。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote>
+<p>1、聊聊Ajax那些事——铁狮子<br><a href="https://segmentfault.com/a/1190000006669043" target="_blank" rel="noopener">https://segmentfault.com/a/1190000006669043</a><br>2、你真的会使用XMLHttpRequest吗？——WEB前端路上踩过的坑儿<br><a href="https://segmentfault.com/a/1190000004322487" target="_blank" rel="noopener">https://segmentfault.com/a/1190000004322487</a><br>3、XMLHttpRequest Level2 使用指南——阮一峰的网络日志<br><a href="http://www.ruanyifeng.com/blog/2012/09/xmlhttprequest_level_2.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2012/09/xmlhttprequest_level_2.html</a></p>
+</blockquote>
+
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/深入了解AJAX/" data-title="深入了解AJAX" data-id="ckem6w7p8001ak8vxk74bs1bp" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/">http</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/09/29/浅析VUE双向绑定原理/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          浅析VUE双向绑定原理
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/09/29/浅析Redux实现原理/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">浅析Redux实现原理</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  <div class="github-card" data-github="yuzhounanhai" data-width="100%" data-height="" data-theme="default"></div>
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/其他/">其他</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络通信/">网络通信</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/">JS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LeetCode解题/">LeetCode解题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TS/">TS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Webpack/">Webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原理/">原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JS/" style="font-size: 20px;">JS</a> <a href="/tags/LeetCode解题/" style="font-size: 12.5px;">LeetCode解题</a> <a href="/tags/React/" style="font-size: 15px;">React</a> <a href="/tags/Redux/" style="font-size: 12.5px;">Redux</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/http/" style="font-size: 15px;">http</a> <a href="/tags/原理/" style="font-size: 17.5px;">原理</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/09/29/简单实现虚拟Dom与Diff算法/">简单实现虚拟DOM与Diff算法</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/浅析VUE双向绑定原理/">浅析VUE双向绑定原理</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/深入了解AJAX/">深入了解AJAX</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/浅析Redux实现原理/">浅析Redux实现原理</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/实现符合promisea+规范/">实现符合Promise A+规范的promise</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 宇宙南海<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    
+
+<script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

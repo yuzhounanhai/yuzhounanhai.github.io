@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>React v16.3 新生命周期 | 南海の笔记</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="React打算在 v17 版本推出新的 Async Rendering，提出一种可被打断的生命周期的形式，并在 v16 版本中为即将上线的这一功能做出兼容升级。（生命周期一旦被打断，下次恢复的时候又会再跑一次之前的生命周期，因此 componentWillMount，componentWillReceiveProps， componentWillUpdate 都不能保证只在挂载/拿到props/状">
+<meta name="keywords" content="React">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React v16.3 新生命周期">
+<meta property="og:url" content="https://yuzhounanhai.github.io/2019/09/29/React新生命周期/index.html">
+<meta property="og:site_name" content="南海の笔记">
+<meta property="og:description" content="React打算在 v17 版本推出新的 Async Rendering，提出一种可被打断的生命周期的形式，并在 v16 版本中为即将上线的这一功能做出兼容升级。（生命周期一旦被打断，下次恢复的时候又会再跑一次之前的生命周期，因此 componentWillMount，componentWillReceiveProps， componentWillUpdate 都不能保证只在挂载/拿到props/状">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-29T07:59:45.734Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React v16.3 新生命周期">
+<meta name="twitter:description" content="React打算在 v17 版本推出新的 Async Rendering，提出一种可被打断的生命周期的形式，并在 v16 版本中为即将上线的这一功能做出兼容升级。（生命周期一旦被打断，下次恢复的时候又会再跑一次之前的生命周期，因此 componentWillMount，componentWillReceiveProps， componentWillUpdate 都不能保证只在挂载/拿到props/状">
+  
+    <link rel="alternate" href="/atom.xml" title="南海の笔记" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">南海の笔记</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">在海的南边，有一片宇宙！宇宙无垠，而探索无尽，是该同懒癌佛系奋斗！</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://yuzhounanhai.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-React新生命周期" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/React新生命周期/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.734Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      React v16.3 新生命周期
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <p>React打算在 v17 版本推出新的 Async Rendering，提出一种可被打断的生命周期的形式，并在 v16 版本中为即将上线的这一功能做出兼容升级。（生命周期一旦被打断，下次恢复的时候又会再跑一次之前的生命周期，因此 <code>componentWillMount</code>，<code>componentWillReceiveProps</code>， <code>componentWillUpdate</code> 都不能保证只在挂载/拿到props/状态变化的时候刷新一次）</p>
+<h2 id="不安全的生命周期"><a href="#不安全的生命周期" class="headerlink" title="不安全的生命周期"></a>不安全的生命周期</h2><p>随着 React 团队在 v17 版本推出的新功能上的实践，发现一些生命周期可能会带来一些危险性，这些生命周期方法经常被误解和巧妙地误用；此外，React 团队预计，对于异步渲染，它们潜在的误用可能会造成更多问题。v16.3版本发布后，官方文档中已经为这些容易出现问题的生命周期添加了 “<code>UNSAFE_</code>” 前缀。</p>
+<p>这些生命周期是：</p>
+<ul>
+<li>componentWillMount</li>
+<li>componentWillReceiveProps</li>
+<li>componentWillUpdate</li>
+</ul>
+<a id="more"></a>
+
+<blockquote>
+<p>注意：UNSAFE所代表的不安全，并不是指“安全性”，而是传达使用这些生命周期的代码在未来版本的React中更容易出现错误，特别是在启用异步渲染时。</p>
+</blockquote>
+<h2 id="版本计划"><a href="#版本计划" class="headerlink" title="版本计划"></a>版本计划</h2><p>这个升级是渐进的，将会持续一整个 v16 版本。目前 React团队在这一逐步升级中做出了以下计划：</p>
+<ul>
+<li><strong>16.3</strong>：介绍别名为不安全的生命周期，<code>UNSAFE_componentWillMount</code>，<code>UNSAFE_componentWillReceiveProps</code>，和<code>UNSAFE_componentWillUpdate</code>。（旧的生命周期名称和新别名都可以在此版本中使用。）</li>
+<li><strong>未来的16.x版本</strong>：启用生命周期 <code>componentWillMount</code>，<code>componentWillReceiveProps</code> 和 <code>componentWillUpdate</code> 的弃用警告。（旧的生命周期名称和新别名都可以在此版本中使用，但旧名称将在开发模式中给予弃用警告。）</li>
+<li><strong>17.0</strong>：删除 <code>componentWillMount</code>，<code>componentWillReceiveProps</code> 和 <code>componentWillUpdate</code>。（从该版本开始，只有带“<code>UNSAFE_</code>”前缀的新别名生命周期名称可以使用。）</li>
+</ul>
+<p>这意味着我们仍然可以使用修改了别名后的生命周期。</p>
+<h2 id="新的生命周期"><a href="#新的生命周期" class="headerlink" title="新的生命周期"></a>新的生命周期</h2><p>为了弥补三个生命周期所带来的漏洞，React 团队将引进一批新的生命周期。</p>
+<h2 id="无法共存"><a href="#无法共存" class="headerlink" title="无法共存"></a>无法共存</h2><blockquote>
+<p>注意：你无法将带有UNSAFE前缀的旧的生命周期与新的生命周期一起使用，一旦你混合使用了新旧生命周期后，将会报错，并告知你使用了不安全的生命周期。</p>
+</blockquote>
+<h2 id="static-getDerivedStateFromProps"><a href="#static-getDerivedStateFromProps" class="headerlink" title="static getDerivedStateFromProps"></a>static getDerivedStateFromProps</h2><p><code>getDerivedStateFromProps</code> 是一个静态的生命周期，<code>getDerivedStateFromProps</code> 会在调用渲染方法之前调用，并且在初始挂载及后续更新时都会被调用。它应返回一个对象来更新状态，如果返回 <code>null</code> 则不更新任何内容。</p>
+<p>此方法无权访问组件实例。如果需要，可以通过提取组件 <code>props</code> 的纯函数及 <code>class</code> 之外的状态，在<code>getDerivedStateFromProps()</code>和其他 <code>class</code> 方法之间重用代码。</p>
+<blockquote>
+<p>注意，不管什么原因，该方法会在每次渲染前触发。这与 <code>UNSAFE_componentWillReceiveProps</code> 形成对比，后者仅在父组件重新渲染时触发，而与 <code>setState</code> 无关。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class Example extends React.Component &#123;</span><br><span class="line">  static getDerivedStateFromProps(props, state) &#123;</span><br><span class="line">    // ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>该生命周期在 v16.3 版本中存在问题，即在组件内 <code>State</code> 更新时不会触发这一生命周期，这一问题在 v16.4 得到解决，这个问题的解决意味着派生 State 更可控，同时会让滥用导致的 bug 更容易被发现。</p>
+</blockquote>
+<h2 id="componentWillReceiveProps改写的替代方案"><a href="#componentWillReceiveProps改写的替代方案" class="headerlink" title="componentWillReceiveProps改写的替代方案"></a>componentWillReceiveProps改写的替代方案</h2><p>React 官网文档中推荐了以下三种替代方案：</p>
+<ul>
+<li><p>如果需要 <strong>执行副作用</strong>（例如，数据提取或动画）以响应 props 中的更改，可以改用为 componentDidUpdate。（P.S.统计中 echarts 绘图）</p>
+</li>
+<li><p>如果只想在 <strong>prop 更改时重新计算某些数据</strong>，请使用 memoization helper 代替。（<a href="https://zh-hans.reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#what-about-memoization）" target="_blank" rel="noopener">https://zh-hans.reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#what-about-memoization）</a></p>
+</li>
+<li><p>如果你想在 <strong>prop 更改时“重置”某些 state</strong>，请考虑使组件完全受控或使用 key 使组件完全不受控 代替。</p>
+</li>
+</ul>
+<h2 id="getSnapshotBeforeUpdate"><a href="#getSnapshotBeforeUpdate" class="headerlink" title="getSnapshotBeforeUpdate"></a>getSnapshotBeforeUpdate</h2><p><code>getSnapshotBeforeUpdate()</code> 在最近一次渲染输出（提交到 DOM 节点）之前调用。它使得组件能在发生更改之前从 DOM 中捕获一些信息（例如，滚动位置）。此生命周期的任何返回值将作为参数传递给 <code>componentDidUpdate()</code>。</p>
+<p>此用法并不常见，但它可能出现在 UI 处理中，如需要以特殊方式处理滚动位置的聊天线程等。</p>
+<p>该生命周期应返回 <code>snapshot</code> 的值（或 <code>null</code>）。</p>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">class ScrollingList extends React.Component &#123;</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">    this.listRef = React.createRef();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getSnapshotBeforeUpdate(prevProps, prevState) &#123;</span><br><span class="line">    // 我们是否在 list 中添加新的 items ？</span><br><span class="line">    // 捕获滚动​​位置以便我们稍后调整滚动位置。</span><br><span class="line">    if (prevProps.list.length &lt; this.props.list.length) &#123;</span><br><span class="line">      const list = this.listRef.current;</span><br><span class="line">      return list.scrollHeight - list.scrollTop;</span><br><span class="line">    &#125;</span><br><span class="line">    return null;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentDidUpdate(prevProps, prevState, snapshot) &#123;</span><br><span class="line">    // 如果我们 snapshot 有值，说明我们刚刚添加了新的 items，</span><br><span class="line">    // 调整滚动位置使得这些新 items 不会将旧的 items 推出视图。</span><br><span class="line">    //（这里的 snapshot 是 getSnapshotBeforeUpdate 的返回值）</span><br><span class="line">    if (snapshot !== null) &#123;</span><br><span class="line">      const list = this.listRef.current;</span><br><span class="line">      list.scrollTop = list.scrollHeight - snapshot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;div ref=&#123;this.listRef&#125;&gt;&#123;/* ...contents... */&#125;&lt;/div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="不需要使用getDerivedStateFromProps"><a href="#不需要使用getDerivedStateFromProps" class="headerlink" title="不需要使用getDerivedStateFromProps"></a>不需要使用getDerivedStateFromProps</h2><p>getDerivedStateFromProps 的存在只有一个目的：让组件在 props 变化时更新 state。</p>
+<h4 id="反面案例"><a href="#反面案例" class="headerlink" title="反面案例"></a>反面案例</h4><h6 id="反面例子1："><a href="#反面例子1：" class="headerlink" title="反面例子1："></a>反面例子1：</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class EmailInput extends Component &#123;</span><br><span class="line">  state = &#123; email: this.props.email &#125;;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    return &lt;input onChange=&#123;this.handleChange&#125; value=&#123;this.state.email&#125; /&gt;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleChange = event =&gt; &#123;</span><br><span class="line">    this.setState(&#123; email: event.target.value &#125;);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  componentWillReceiveProps(nextProps) &#123;</span><br><span class="line">    // 这会覆盖所有组件内的 state 更新！</span><br><span class="line">    // 不要这样做。</span><br><span class="line">    this.setState(&#123; email: nextProps.email &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>乍看之下还可以。 <code>state</code> 的初始值是 <code>props</code> 传来的，当在 <code>&lt;input&gt;</code> 里输入时，修改 <code>state</code>。但是如果父组件重新渲染，我们输入的所有东西都会丢失！即使在重置 <code>state</code> 前比较 <code>nextProps.email !== this.state.email</code> 仍然会导致更新。</p>
+<p>因此直接复制 <code>prop</code> 到 <code>state</code> 是一个非常糟糕的想法。</p>
+<h6 id="反面例子2："><a href="#反面例子2：" class="headerlink" title="反面例子2："></a>反面例子2：</h6><p>继续上面的示例，我们可以只使用 props.email 来更新组件，这样能防止修改 state 导致的 bug。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class EmailInput extends Component &#123;</span><br><span class="line">  state = &#123;</span><br><span class="line">    email: this.props.email</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  componentWillReceiveProps(nextProps) &#123;</span><br><span class="line">    // 只要 props.email 改变，就改变 state</span><br><span class="line">    if (nextProps.email !== this.props.email) &#123;</span><br><span class="line">      this.setState(&#123;</span><br><span class="line">        email: nextProps.email</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  // ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样的设计写法就有问题，但依然可能存在这个问题。有两个方法解决这个问题。</p>
+<ul>
+<li>建议使用完全受控</li>
+</ul>
+<p>保证了只有一个数据源，成为了一个轻量级的函数组件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function EmailInput(props) &#123;</span><br><span class="line">  return &lt;input onChange=&#123;props.onChange&#125; value=&#123;props.email&#125; /&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>建议使用有 key 的非可控组件</li>
+</ul>
+<p>另外一个选择是让组件自己存储临时的 email state。在这种情况下，组件仍然可以从 prop 接收“初始值”，但是更改之后的值就和 prop 没关系了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class EmailInput extends Component &#123;</span><br><span class="line">  state = &#123; email: this.props.defaultEmail &#125;;</span><br><span class="line"></span><br><span class="line">  handleChange = event =&gt; &#123;</span><br><span class="line">    this.setState(&#123; email: event.target.value &#125;);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    return &lt;input onChange=&#123;this.handleChange&#125; value=&#123;this.state.email&#125; /&gt;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>为了实现值的切换，我们可以使用 <code>key</code> 这个特殊的 React 属性。</p>
+<p>当 <code>key</code> 变化时， React 会创建一个新的而不是更新一个既有的组件。 Keys 一般用来渲染动态列表，但是这里也可以使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;EmailInput</span><br><span class="line">  defaultEmail=&#123;this.props.user.email&#125;</span><br><span class="line">  key=&#123;this.props.user.id&#125;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
+
+<p>每次 ID 更改，都会重新创建 <code>EmailInput</code> ，并将其状态重置为最新的 <code>defaultEmail</code> 值。 使用此方法，不用为每次输入都添加 <code>key</code>，在整个表单上添加 <code>key</code> 更有位合理。每次 <code>key</code> 变化，表单里的所有组件都会用新的初始值重新创建。</p>
+<p>大部分情况下，这是处理重置 <code>state</code> 的最好的办法。</p>
+<h2 id="memoization"><a href="#memoization" class="headerlink" title="memoization"></a>memoization</h2><p>仅在输入变化时，重新计算 render 需要使用的值，这个技术叫做 memoization。</p>
+<p>示例： 用户输入查询条件时显示匹配的项，我们可以使用派生 state 存储过滤后的列表：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">class Example extends Component &#123;</span><br><span class="line">  state = &#123;</span><br><span class="line">    filterText: &quot;&quot;,</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  static getDerivedStateFromProps(props, state) &#123;</span><br><span class="line">    // 列表变化或者过滤文本变化时都重新过滤。</span><br><span class="line">    // 注意我们要存储 prevFilterText 和 prevPropsList 来检测变化。</span><br><span class="line">    if (</span><br><span class="line">      props.list !== state.prevPropsList ||</span><br><span class="line">      state.prevFilterText !== state.filterText</span><br><span class="line">    ) &#123;</span><br><span class="line">      return &#123;</span><br><span class="line">        prevPropsList: props.list,</span><br><span class="line">        prevFilterText: state.filterText,</span><br><span class="line">        filteredList: props.list.filter(item =&gt; item.text.includes(state.filterText))</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    return null;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleChange = event =&gt; &#123;</span><br><span class="line">    this.setState(&#123; filterText: event.target.value &#125;);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;Fragment&gt;</span><br><span class="line">        &lt;input onChange=&#123;this.handleChange&#125; value=&#123;this.state.filterText&#125; /&gt;</span><br><span class="line">        &lt;ul&gt;&#123;this.state.filteredList.map(item =&gt; &lt;li key=&#123;item.id&#125;&gt;&#123;item.text&#125;&lt;/li&gt;)&#125;&lt;/ul&gt;</span><br><span class="line">      &lt;/Fragment&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个实现避免了重复计算 <code>filteredList</code>，但是过于复杂。因为它必须单独追踪并检测 <code>prop</code> 和 <code>state</code> 的变化，在能及时的更新过滤后的 list。我们可以使用 <code>PureComponent</code>，把过滤操作放到 <code>render</code> 方法里来简化这个组件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">// PureComponents 只会在 state 或者 prop 的值修改时才会再次渲染。</span><br><span class="line">// 通过对 state 和 prop 的 key 做浅比较（ shallow comparison ）来确定有没有变化。</span><br><span class="line">class Example extends PureComponent &#123;</span><br><span class="line">  // state 只需要保存 filter 的值：</span><br><span class="line">  state = &#123;</span><br><span class="line">    filterText: &quot;&quot;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  handleChange = event =&gt; &#123;</span><br><span class="line">    this.setState(&#123; filterText: event.target.value &#125;);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    // PureComponent 的 render 只有</span><br><span class="line">    // 在 props.list 或 state.filterText 变化时才会调用</span><br><span class="line">    const filteredList = this.props.list.filter(</span><br><span class="line">      item =&gt; item.text.includes(this.state.filterText)</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    return (</span><br><span class="line">      &lt;Fragment&gt;</span><br><span class="line">        &lt;input onChange=&#123;this.handleChange&#125; value=&#123;this.state.filterText&#125; /&gt;</span><br><span class="line">        &lt;ul&gt;&#123;filteredList.map(item =&gt; &lt;li key=&#123;item.id&#125;&gt;&#123;item.text&#125;&lt;/li&gt;)&#125;&lt;/ul&gt;</span><br><span class="line">      &lt;/Fragment&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的方法比派生 state 版本更加清晰明了。只有在过滤很大的列表时，这样做的效率不是很好。当有 <code>prop</code> 改变时 <code>PureComponent</code> 不会阻止再次渲染。为了解决这两个问题，我们可以添加 <code>memoization</code> 帮助函数来阻止非必要的过滤：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">import memoize from &quot;memoize-one&quot;;</span><br><span class="line"></span><br><span class="line">class Example extends Component &#123;</span><br><span class="line">  // state 只需要保存当前的 filter 值：</span><br><span class="line">  state = &#123; filterText: &quot;&quot; &#125;;</span><br><span class="line"></span><br><span class="line">  // 在 list 或者 filter 变化时，重新运行 filter：</span><br><span class="line">  filter = memoize(</span><br><span class="line">    (list, filterText) =&gt; list.filter(item =&gt; item.text.includes(filterText))</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  handleChange = event =&gt; &#123;</span><br><span class="line">    this.setState(&#123; filterText: event.target.value &#125;);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    // 计算最新的过滤后的 list。</span><br><span class="line">    // 如果和上次 render 参数一样，`memoize-one` 会重复使用上一次的值。</span><br><span class="line">    const filteredList = this.filter(this.props.list, this.state.filterText);</span><br><span class="line"></span><br><span class="line">    return (</span><br><span class="line">      &lt;Fragment&gt;</span><br><span class="line">        &lt;input onChange=&#123;this.handleChange&#125; value=&#123;this.state.filterText&#125; /&gt;</span><br><span class="line">        &lt;ul&gt;&#123;filteredList.map(item =&gt; &lt;li key=&#123;item.id&#125;&gt;&#123;item.text&#125;&lt;/li&gt;)&#125;&lt;/ul&gt;</span><br><span class="line">      &lt;/Fragment&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="改写示例"><a href="#改写示例" class="headerlink" title="改写示例"></a>改写示例</h2><blockquote>
+<p><a href="https://zh-hans.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#examples" target="_blank" rel="noopener">https://zh-hans.reactjs.org/blog/2018/03/27/update-on-async-rendering.html#examples</a></p>
+</blockquote>
+
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/React新生命周期/" data-title="React v16.3 新生命周期" data-id="ckem6w7oj000wk8vx8by8mrtk" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/09/29/webpack原理及优化/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Webpack原理及优化
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/09/29/generator笔记/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">generator摘录笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  <div class="github-card" data-github="yuzhounanhai" data-width="100%" data-height="" data-theme="default"></div>
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/其他/">其他</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络通信/">网络通信</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/">JS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LeetCode解题/">LeetCode解题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TS/">TS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Webpack/">Webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原理/">原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JS/" style="font-size: 20px;">JS</a> <a href="/tags/LeetCode解题/" style="font-size: 12.5px;">LeetCode解题</a> <a href="/tags/React/" style="font-size: 15px;">React</a> <a href="/tags/Redux/" style="font-size: 12.5px;">Redux</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/http/" style="font-size: 15px;">http</a> <a href="/tags/原理/" style="font-size: 17.5px;">原理</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/09/29/简单实现虚拟Dom与Diff算法/">简单实现虚拟DOM与Diff算法</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/浅析VUE双向绑定原理/">浅析VUE双向绑定原理</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/深入了解AJAX/">深入了解AJAX</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/浅析Redux实现原理/">浅析Redux实现原理</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/实现符合promisea+规范/">实现符合Promise A+规范的promise</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 宇宙南海<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    
+
+<script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

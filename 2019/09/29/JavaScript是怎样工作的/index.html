@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>JavaScript 是怎样工作的 | 南海の笔记</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="JavaScript 是单线程的执行语言，它的 API 是由各个浏览器厂商进行实现的，所谓的兼容性问题也就是说标准的不统一，在实现上存在差异（实现的方法名、实现功能的浏览器版本）。 本文将介绍 JS 语言的执行，也就是事件循环（Event Loop）相关的内容。 V8 引擎最具代表性的一个 JavaScript 引擎是 Chrome 的 V8 引擎，它被使用在 chrome 浏览器、NodeJS">
+<meta name="keywords" content="原理,JS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript 是怎样工作的">
+<meta property="og:url" content="https://yuzhounanhai.github.io/2019/09/29/JavaScript是怎样工作的/index.html">
+<meta property="og:site_name" content="南海の笔记">
+<meta property="og:description" content="JavaScript 是单线程的执行语言，它的 API 是由各个浏览器厂商进行实现的，所谓的兼容性问题也就是说标准的不统一，在实现上存在差异（实现的方法名、实现功能的浏览器版本）。 本文将介绍 JS 语言的执行，也就是事件循环（Event Loop）相关的内容。 V8 引擎最具代表性的一个 JavaScript 引擎是 Chrome 的 V8 引擎，它被使用在 chrome 浏览器、NodeJS">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/v8.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/runtime.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/callStackEG.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/runtime.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/run1.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/run2.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/run3.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/run4.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/run5.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/run6.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/run7.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/run8.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/run9.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/run10.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/run11.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/run12.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/run13.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/run14.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/run15.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/run16.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/sp_setTimeout.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/sp_setTimeout1.png">
+<meta property="og:image" content="https://yuzhounanhai.github.io/images/20190705/es6_runtime.png">
+<meta property="og:updated_time" content="2019-09-29T07:59:45.731Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript 是怎样工作的">
+<meta name="twitter:description" content="JavaScript 是单线程的执行语言，它的 API 是由各个浏览器厂商进行实现的，所谓的兼容性问题也就是说标准的不统一，在实现上存在差异（实现的方法名、实现功能的浏览器版本）。 本文将介绍 JS 语言的执行，也就是事件循环（Event Loop）相关的内容。 V8 引擎最具代表性的一个 JavaScript 引擎是 Chrome 的 V8 引擎，它被使用在 chrome 浏览器、NodeJS">
+<meta name="twitter:image" content="https://yuzhounanhai.github.io/images/20190705/v8.png">
+  
+    <link rel="alternate" href="/atom.xml" title="南海の笔记" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">南海の笔记</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">在海的南边，有一片宇宙！宇宙无垠，而探索无尽，是该同懒癌佛系奋斗！</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://yuzhounanhai.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-JavaScript是怎样工作的" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/JavaScript是怎样工作的/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.731Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JavaScript 是怎样工作的
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <p>JavaScript 是单线程的执行语言，它的 API 是由各个浏览器厂商进行实现的，所谓的兼容性问题也就是说标准的不统一，在实现上存在差异（实现的方法名、实现功能的浏览器版本）。</p>
+<p>本文将介绍 JS 语言的执行，也就是事件循环（Event Loop）相关的内容。</p>
+<h2 id="V8-引擎"><a href="#V8-引擎" class="headerlink" title="V8 引擎"></a>V8 引擎</h2><p>最具代表性的一个 JavaScript 引擎是 Chrome 的 V8 引擎，它被使用在 chrome 浏览器、NodeJS 中。如果用一个简单的模型来描述它，就是这个样子的：</p>
+<a id="more"></a>
+
+<p><img src="/images/20190705/v8.png" alt="v8引擎"></p>
+<p>从图中不难看出，引擎包括了两个重要的组件：内存堆和调用栈。这两个重要组件的作用，将会在后面进行介绍。</p>
+<p>堆是一个内存存储空间，它不关注内部储存内容的保存顺序，堆中保存了所有正在被使用的变量和对象。同时也保存了一些当前作用域已经不会再被使用的但还没被垃圾回收机制回收的帧。</p>
+<p>一个帧是一个连续的工作单元。当一个 JS 函数被调用时，运行时环境就会在栈中创建一个帧。帧里保存了特殊的函数参数和局部变量。当函数返回时，帧就被从栈中推出。</p>
+<h2 id="运行时"><a href="#运行时" class="headerlink" title="运行时"></a>运行时</h2><p><img src="/images/20190705/runtime.png" alt="运行时"></p>
+<p>许多我们开发者乐意广泛使用的方法、函数，像DOM、BOM、AJAX、setTimeout等。也就是我们俗称的WEB APIs。V8 引擎不提供这些 APIs，所以这些 APIs 从哪里来？因此，js运行会比我们预想的更为复杂一些。所谓的运行时，其实就是包括了 JS 运行时所必须的“组成部分”：如 WEB APIs、 事件循环、调用栈、回调队列等。</p>
+<h2 id="调用栈"><a href="#调用栈" class="headerlink" title="调用栈"></a>调用栈</h2><p>调用栈中存储的是调用的信息。根据调用情况进行压栈、出栈。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">multiply</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x * y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">printSquare</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> s = multiply(x, x);</span><br><span class="line">    <span class="built_in">console</span>.log(s);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">printSquare(<span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+
+<p>对于以上代码，调用栈是这样工作的：</p>
+<p><img src="/images/20190705/callStackEG.png" alt="调用栈实例"></p>
+<ol>
+<li><p>JS开始执行，执行到 <code>printSquare(5);</code>，将此语句压栈；发现调用信息，进行调用该函数；</p>
+</li>
+<li><p>进入到 <code>printSquare</code> 内部，执行 <code>var s = multiply(x, x);</code> 语句；将该语句压栈；发现调用信息，进行调用该函数；</p>
+</li>
+<li><p>进入到 <code>multiply</code> 函数内部，return 结果，调用结束，语句出栈。继续执行下一条 <code>console.log(s)</code>, 将语句压栈；</p>
+</li>
+<li><p>打印完毕，该语句出栈；</p>
+</li>
+<li><p>该函数执行完毕，<code>printSquare(5)</code> 出栈</p>
+</li>
+</ol>
+<h2 id="事件循环-Event-Loop"><a href="#事件循环-Event-Loop" class="headerlink" title="事件循环 Event Loop"></a>事件循环 Event Loop</h2><p>JavaScript是一个单线程的编程语言，并发相关的情况，看似是“多线程”的事件，其实都是用单线程模拟出来的。</p>
+<p>而单线程也是一个限制，单线程意味着一件事：同一个时间段只能做一件事。而目前许许多多的场景如计时器等等，其实每时每刻都在做着类似于多线程的事情，每时每刻都有事情在做，页面就不会响应用户的操作，这也就是线程的阻塞。</p>
+<p>事件循环（Event Loop）为了实现线程的不阻塞应运而生。</p>
+<h2 id="同步和异步"><a href="#同步和异步" class="headerlink" title="同步和异步"></a>同步和异步</h2><p>JavaScript 中存在同步代码和异步代码,对于同步代码，它们会依次执行。对于异步代码，它们会在特定的时候回调执行，如代码中的setTimeout计时器，它会在一秒后回调执行一个打印。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">'hello 0'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'hello 1'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'hello 2'</span>);</span><br><span class="line"><span class="comment">// hello 0</span></span><br><span class="line"><span class="comment">// hello 1</span></span><br><span class="line"><span class="comment">// hello 2</span></span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'hello 0'</span>);</span><br><span class="line">&#125;, <span class="number">1000</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'hello 1'</span>)</span><br><span class="line"><span class="comment">// hello 1</span></span><br><span class="line"><span class="comment">// hello 0</span></span><br></pre></td></tr></table></figure>
+
+<p>JS 引擎线程只会关心异步的发起函数是谁、回调函数是什么？并将异步交给 webapi 去处理，然后继续执行其他任务。下面我们具体来了解一下 JS 的执行流程。</p>
+<h2 id="执行流程"><a href="#执行流程" class="headerlink" title="执行流程"></a>执行流程</h2><p><img src="/images/20190705/runtime.png" alt="运行时"></p>
+<p>我们再来观察一下运行时的这张图，事件循环在这张图中具备什么作用？</p>
+<p>Event Loop有一个简单的工作：监控Call Stack和Callback Queue。<br>如果调用堆栈为空，它将从队列中获取第一个事件，并将其推送到调用堆栈。<br>下面详细的查看一遍流程：</p>
+<ol>
+<li>左上角是执行的代码，左下角是控制台console输出的结果，右侧是运行时环境。对于执行代码，从上到下依次执行。</li>
+</ol>
+<p><img src="/images/20190705/run1.png" alt="执行流程"></p>
+<ol start="2">
+<li>首先，第一条语句被加入到了调用栈中</li>
+</ol>
+<p><img src="/images/20190705/run2.png" alt="执行流程"></p>
+<ol start="3">
+<li>这条语句被执行了，在控制台输出了一个Hi</li>
+</ol>
+<p><img src="/images/20190705/run3.png" alt="执行流程"></p>
+<ol start="4">
+<li>随即，这条语句被移出了调用栈</li>
+</ol>
+<p><img src="/images/20190705/run4.png" alt="执行流程"></p>
+<ol start="5">
+<li>setTimeout被移入调用栈</li>
+</ol>
+<p><img src="/images/20190705/run5.png" alt="执行流程"></p>
+<ol start="6">
+<li>setTimeout被执行，浏览器的WEB APIs创建了一个计时器，为你处理倒计时</li>
+</ol>
+<p><img src="/images/20190705/run6.png" alt="执行流程"></p>
+<ol start="7">
+<li>setTimeout本身已经执行完毕，被移出调用栈</li>
+</ol>
+<p><img src="/images/20190705/run7.png" alt="执行流程"></p>
+<ol start="8">
+<li>最后一条打印语句被移入调用栈</li>
+</ol>
+<p><img src="/images/20190705/run8.png" alt="执行流程"></p>
+<ol start="9">
+<li>执行这一语句，在控制台输出一个Bye</li>
+</ol>
+<p><img src="/images/20190705/run9.png" alt="执行流程"></p>
+<ol start="10">
+<li>语句执行结束，被移出调用栈</li>
+</ol>
+<p><img src="/images/20190705/run10.png" alt="执行流程"></p>
+<ol start="11">
+<li>计时器计时到五秒结束，将回调cb1函数加入到回调队列中</li>
+</ol>
+<p><img src="/images/20190705/run11.png" alt="执行流程"></p>
+<ol start="12">
+<li><strong>Event Loop查看到call Stack为空</strong>，于是将回调队列中的第一个回调事件，加入到调用栈中</li>
+</ol>
+<p><img src="/images/20190705/run12.png" alt="执行流程"></p>
+<ol start="13">
+<li>将cb1中的打印语句压栈调用</li>
+</ol>
+<p><img src="/images/20190705/run13.png" alt="执行流程"></p>
+<ol start="14">
+<li>执行打印语句，在控制台输出cb1</li>
+</ol>
+<p><img src="/images/20190705/run14.png" alt="执行流程"></p>
+<ol start="15">
+<li>执行结束，依次出栈</li>
+</ol>
+<p><img src="/images/20190705/run15.png" alt="执行流程"></p>
+<ol start="16">
+<li>执行结束，依次出栈</li>
+</ol>
+<p><img src="/images/20190705/run16.png" alt="执行流程"></p>
+<blockquote>
+<p>setTimeout设置1秒后执行回调，是真的在一秒钟之后执行吗？<br>一秒钟后，WEB APIs只会将回调函数推入到回调队列中，等待Event Loop检测到Call Stack为空时，才会依次将回调推入到调用栈中进行执行。所以并不会真的在一秒钟后执行。</p>
+</blockquote>
+<h2 id="诡异的setTimeout"><a href="#诡异的setTimeout" class="headerlink" title="诡异的setTimeout"></a>诡异的setTimeout</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">2</span>);</span><br><span class="line">&#125;, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">&#125;, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">0</span>)</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>上述代码的执行结果会是什么？</p>
+<ul>
+<li>A. 0 1 2</li>
+<li>B. 2 1 0</li>
+<li>C. 1 0 2</li>
+<li>D. 其他答案</li>
+</ul>
+<p>在揭晓结果之前，我们先来分析一下AB选项答案产生的原因</p>
+<p>A.从回调时间来看，0毫秒的回调会最先加入到回调队列中，1毫秒的其次，2毫秒的最后加入，由于事件循环总是读取第一个回调队列中的项推入到调用栈中执行，所以输出的结果是0 1 2.</p>
+<p>B选项，有一定经验的开发，会喜欢选择这一个选项，因为MDN上，介绍了一则关于最小延迟的说明，这些代码的时间都小于4毫秒，因此，所以回调被加入到回调队列中的时刻都是一致的，此时会按照从上到下的规则加入，因此执行结果是2 1 0.</p>
+<p>然而结果真的是这样吗？我们直接来运行这段代码：</p>
+<p><img src="/images/20190705/sp_setTimeout.png" alt="执行结果"></p>
+<p>执行结果是 1 0 2，为什么会是这个情况呢？</p>
+<p><img src="/images/20190705/sp_setTimeout1.png" alt="相关说明"></p>
+<p>在规范中有这样的说明，规范对最小延迟的时间进行了休整。斗胆推测：一开始HTML5规范确实有最低4ms的规范，不过在后续修订中进行了修改，不排除规范在向实现看齐，也就是说，我们如今的开发确实出现了需要更低毫秒数的需求，即产生一种逆向影响。</p>
+<p>因此在进行低毫秒数的编码时，要注意各个浏览器的特性。</p>
+<h2 id="宏任务与微任务"><a href="#宏任务与微任务" class="headerlink" title="宏任务与微任务"></a>宏任务与微任务</h2><p>setTimeout是ES5之前常用的异步事件。但在ES6中，除了引入了一些全新的异步代码，如promise，同时也引入了一个全新的概念：宏任务与微任务。<br>我们知道 Promise 是 ES6 引入的一个异步方法，那么按照刚才我们所说的，这段代码执行结果应该是什么？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">'script start'</span>);</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'timer over'</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"><span class="keyword">var</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'promise'</span>);</span><br><span class="line">    resolve();</span><br><span class="line">&#125;);</span><br><span class="line">promise.then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'promise cb'</span>);</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'script end'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>凭借我们刚刚学习得到的，以上代码的执行结果是:</p>
+<blockquote>
+<p>注意以下只是思维步骤的一部分，并 <strong>不是正确答案！</strong><br>script start<br>promise<br>script end<br>timer over<br>promise cb</p>
+</blockquote>
+<p>但是实际的执行结果是：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// script start </span></span><br><span class="line"><span class="comment">// promise</span></span><br><span class="line"><span class="comment">// script end</span></span><br><span class="line"><span class="comment">// promise cb</span></span><br><span class="line"><span class="comment">// timer over</span></span><br></pre></td></tr></table></figure>
+
+<p>为什么 promise 的回调会先于 timeout ?</p>
+<p>这就是宏任务与微任务概念引入后运行时发生的变化。</p>
+<h2 id="ES6中的运行时"><a href="#ES6中的运行时" class="headerlink" title="ES6中的运行时"></a>ES6中的运行时</h2><p><img src="/images/20190705/es6_runtime.png" alt="es6运行时"></p>
+<p>ES6中引入了全新的概念宏任务与微任务后，运行时发生了变化，可以看见在回调队列中，分成了两个队列，一个是宏任务队列，一个是微任务队列。</p>
+<p>微任务的执行优先级会更高，当宏任务与微任务同时存在时，如果此时Event Loop需要安排事件到调用栈中执行，那么会将微任务队列中所有事件推入并执行。这也就解释了刚才的代码中，promise cb会比timer更早打印的原因。</p>
+<p>所以明白哪些是宏任务哪些是微任务变得尤为重要。</p>
+<p>这里简要的罗列几个常用的宏任务和微任务，其余不常用后面大家有用到的时候可以自行查资料。</p>
+<blockquote>
+<p>macro-task(宏任务)：包括整体代码script，setTimeout，setInterval<br>micro-task(微任务)：new Promise().then(回调)，process.nextTick</p>
+</blockquote>
+<p>最后，我们再梳理一遍加入了宏任务与微任务这个概念后，整个运行时的运行过程</p>
+<h2 id="总结：运行过程"><a href="#总结：运行过程" class="headerlink" title="总结：运行过程"></a>总结：运行过程</h2><ol>
+<li>JavaScript内核加载代码到调用栈</li>
+<li>调用栈依次执行主线程的任务，遇到异步调用的语句时，交由WEB APIs执行，并添加回调事件到回调队列中。微任务事件添加到微任务队列中；宏任务事件添加到宏任务队列中</li>
+<li>当调用栈为空时，Event Loop读取微任务回调队列中所有事件，推入到调用栈中执行。</li>
+<li>3执行完毕后，若调用栈继续为空时，会依次取出宏任务队列中的回调事件，推入调用栈中执行。</li>
+<li>若过程中又再遇到微任务或者宏任务，继续分队列，继续事件循环。</li>
+</ol>
+<h2 id="课后练习"><a href="#课后练习" class="headerlink" title="课后练习"></a>课后练习</h2><h4 id="1"><a href="#1" class="headerlink" title="1."></a>1.</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> promiseGlobal = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span>=&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>)</span><br><span class="line">    resolve(<span class="string">'2'</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">3</span>) </span><br><span class="line"></span><br><span class="line">promiseGlobal.then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(data)</span><br><span class="line">    <span class="keyword">let</span> setTimeoutInner = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="number">4</span>)</span><br><span class="line">    &#125;, <span class="number">1000</span>)</span><br><span class="line">    <span class="keyword">let</span> promiseInner =<span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span>=&gt;</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="number">5</span>) </span><br><span class="line">        resolve(<span class="number">6</span>)</span><br><span class="line">    &#125;).then(<span class="function"><span class="params">data</span>=&gt;</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(data)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> setTimeoutGlobal = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">7</span>);</span><br><span class="line">    <span class="keyword">let</span> promiseInGlobalTimeout = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span>=&gt;</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="number">8</span>); </span><br><span class="line">        resolve(<span class="number">9</span>)</span><br><span class="line">    &#125;).then(<span class="function"><span class="params">data</span>=&gt;</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(data)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;,<span class="number">1000</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="2"><a href="#2" class="headerlink" title="2."></a>2.</h4><blockquote>
+<p>提示：async 函数，可以理解为是 Generator 函数的语法糖。它建立在 promise 之上，总是与 await 一起使用的。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async1</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'async1 start'</span>);</span><br><span class="line">    <span class="keyword">await</span> async2();</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'async1 end'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async2</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'async2'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'script start'</span>);</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'setTimeout'</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">async1();</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'promise1'</span>);</span><br><span class="line">    resolve();</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'promise2'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'script end'</span>);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这一题 promise2 和 async1 end 的打印顺序会根据不同浏览器存在差异。</p>
+</blockquote>
+<h2 id="其他阅读"><a href="#其他阅读" class="headerlink" title="其他阅读"></a>其他阅读</h2><h4 id="为什么-JS-选择了单线程模型，而没有选择多线程？"><a href="#为什么-JS-选择了单线程模型，而没有选择多线程？" class="headerlink" title="为什么 JS 选择了单线程模型，而没有选择多线程？"></a>为什么 JS 选择了单线程模型，而没有选择多线程？</h4><blockquote>
+<p>JS 的单线程，与它的用途有关。作为浏览器脚本语言，JS的主要用途是与用户互动，以及操作DOM。这决定了它只能是单线程，否则会带来很复杂的同步问题。比如，假定JS同时有两个线程，一个线程在某个DOM结点上添加内容，另一个线程删除了这个节点，这时浏览器应该以哪个线程为准？<br>所以为了避免复杂性，从一诞生，JS就是单线程。这已经成为了JS的核心特征，在将来也不会改变。</p>
+</blockquote>
+
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/JavaScript是怎样工作的/" data-title="JavaScript 是怎样工作的" data-id="ckem6w7oi000vk8vxbju0czie" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原理/">原理</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/09/29/LeetCode/15-3sum/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          三数相加
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/09/29/JavaScript原生API实现/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">原生API的实现</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  <div class="github-card" data-github="yuzhounanhai" data-width="100%" data-height="" data-theme="default"></div>
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/其他/">其他</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络通信/">网络通信</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/">JS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LeetCode解题/">LeetCode解题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TS/">TS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Webpack/">Webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原理/">原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JS/" style="font-size: 20px;">JS</a> <a href="/tags/LeetCode解题/" style="font-size: 12.5px;">LeetCode解题</a> <a href="/tags/React/" style="font-size: 15px;">React</a> <a href="/tags/Redux/" style="font-size: 12.5px;">Redux</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/http/" style="font-size: 15px;">http</a> <a href="/tags/原理/" style="font-size: 17.5px;">原理</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/09/29/简单实现虚拟Dom与Diff算法/">简单实现虚拟DOM与Diff算法</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/浅析VUE双向绑定原理/">浅析VUE双向绑定原理</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/深入了解AJAX/">深入了解AJAX</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/浅析Redux实现原理/">浅析Redux实现原理</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/实现符合promisea+规范/">实现符合Promise A+规范的promise</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 宇宙南海<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    
+
+<script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

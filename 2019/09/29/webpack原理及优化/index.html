@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Webpack原理及优化 | 南海の笔记</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Webpack 是一个黑盒，内部有其自我的一套运行流程，开发人员无需关注其内部做了什么，仅需通过 Webpack 所暴露出的配置字段进行配置，即可达到模块打包的目的。 原理工作原理基本概念 Entry 入口， webpack 执行构建的第一步将从 Entry 开始，可抽象成输入。  Module 模块，在 webpack 里一切皆模块， 一个模块对应一个文件。 Webpack 会从配置的 Entr">
+<meta name="keywords" content="Webpack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Webpack原理及优化">
+<meta property="og:url" content="https://yuzhounanhai.github.io/2019/09/29/webpack原理及优化/index.html">
+<meta property="og:site_name" content="南海の笔记">
+<meta property="og:description" content="Webpack 是一个黑盒，内部有其自我的一套运行流程，开发人员无需关注其内部做了什么，仅需通过 Webpack 所暴露出的配置字段进行配置，即可达到模块打包的目的。 原理工作原理基本概念 Entry 入口， webpack 执行构建的第一步将从 Entry 开始，可抽象成输入。  Module 模块，在 webpack 里一切皆模块， 一个模块对应一个文件。 Webpack 会从配置的 Entr">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-29T07:59:45.735Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Webpack原理及优化">
+<meta name="twitter:description" content="Webpack 是一个黑盒，内部有其自我的一套运行流程，开发人员无需关注其内部做了什么，仅需通过 Webpack 所暴露出的配置字段进行配置，即可达到模块打包的目的。 原理工作原理基本概念 Entry 入口， webpack 执行构建的第一步将从 Entry 开始，可抽象成输入。  Module 模块，在 webpack 里一切皆模块， 一个模块对应一个文件。 Webpack 会从配置的 Entr">
+  
+    <link rel="alternate" href="/atom.xml" title="南海の笔记" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">南海の笔记</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">在海的南边，有一片宇宙！宇宙无垠，而探索无尽，是该同懒癌佛系奋斗！</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://yuzhounanhai.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-webpack原理及优化" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/webpack原理及优化/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.735Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Webpack原理及优化
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <p>Webpack 是一个黑盒，内部有其自我的一套运行流程，开发人员无需关注其内部做了什么，仅需通过 Webpack 所暴露出的配置字段进行配置，即可达到模块打包的目的。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><ul>
+<li><p>Entry 入口， webpack 执行构建的第一步将从 Entry 开始，可抽象成输入。</p>
+</li>
+<li><p>Module 模块，在 webpack 里一切皆模块， 一个模块对应一个文件。 Webpack 会从配置的 Entry 开始，递归找出所有依赖的模块。</p>
+</li>
+<li><p>Chunk 代码块 Chunk 由多个模块组合而成，用于代码合并与分割。</p>
+</li>
+<li><p>Loader 模块转换器，用于将模块的原内容按照需求转换成新内容。</p>
+</li>
+<li><p>Plugin 扩展插件，在 Webpack 构建流程中的特定时机会广播对应的事件，插件可以监听这些事件的发生，在特定的时机做对应的事情</p>
+</li>
+</ul>
+<a id="more"></a>
+
+<h4 id="构建流程"><a href="#构建流程" class="headerlink" title="构建流程"></a>构建流程</h4><p>Webpack 的构建流程主要可以分为三大阶段</p>
+<ul>
+<li><p>初始化：启动构建，读取与合并配置参数，加载plugin，实例化 Compiler</p>
+</li>
+<li><p>编译: 从 Entry 出发，针对每个 Module 串行调用对应的 Loader 去翻译文件的内容，再找到该 Module 依赖的 Module，递归地进行编译处理。</p>
+</li>
+<li><p>输出：将编译后的 Module 组合成 Chunk ，将 Chunk 转换成文件，输出到文件系统中。</p>
+</li>
+</ul>
+<p>在每个大阶段中又会发生很多事件，Webpack 会将这些事件广播出来供 Plugin 使用。</p>
+<h6 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h6><ol>
+<li><p>初始化参数: 从配置文件和 shell 语句中读取与合并参数，得出最终的参数，在这个过程中还会执行配置文件中的插件实例化语句new Plugin()</p>
+</li>
+<li><p>实例化Cpmpiler: 用上一步得到的参数初始化 Compiler 实例，Compiler 负责文件监听和启动编译。在 Compiler 实例中包含了完整的 Webpack 配置。 全局只有一个 Compiler 实例。</p>
+</li>
+<li><p>加载插件：依次调用插件的 apply 方法，让插件可以监听后续的所有事件节点。同时向插件传入 Compiler 实例的应用，以方便插件通过 compiler 调用 webpack 提供的 API。</p>
+</li>
+<li><p>environment: 开始应用 Node.js 风格的文件系统到 compiler 对象， 以方便后续文件的寻找和读取。</p>
+</li>
+<li><p>entry-option: 读取配置的 Entry，为每个 Entry 实例化一个对应的 EntryPlugin，为后面该 Entry 的递归解析工作做准备。</p>
+</li>
+<li><p>after-plugins: 调用完所有内置的和配置的插件的 apply 方法。</p>
+</li>
+<li><p>after-resolvers: 根据配置初始化 resolver，resolver 负责在文件系统中寻找指定路径的文件。</p>
+</li>
+</ol>
+<h6 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h6><ol>
+<li><p>run: 启动一次新的编译</p>
+</li>
+<li><p>watch-run: 和run类似，区别在于它是在监听模式下启动编译，在这个事件中可以获取是哪些文件发生了变化从而导致重新启动一次新的编译</p>
+</li>
+<li><p>compile: 该事件是为了告诉插件一次新的编译将要启动，同时会给插件带上 compiler 对象。</p>
+</li>
+<li><p>compilation: 当 Webpack 以开发模式运行时，每当检测到文件的变化，便有一次新的 Compilation 被创建， 一个 Compilation 对象包含了当前的模块资源、编译生成资源、变化的文件等。Compilation 对象也提供了很多事件回调给插件进行扩展。</p>
+<ol>
+<li><p>build-module: 使用对应的 Loader 去转换一个模块</p>
+</li>
+<li><p>normal-module-loader: 在用 Loader 转换完一个模块后，使用 acorn 解析转换后的内容，输出对应的抽象语法树（AST），以方便 Webpack 在后面对代码进行分析</p>
+</li>
+<li><p>program：从配置的入口模块开始，分析其 AST，当遇到require等导入其他模块的语句时，便将其加入依赖的模块列表中，同时对新找出的依赖模块递归分析，最终弄清楚所有模块的依赖关系。</p>
+</li>
+<li><p>seal: 所有模块及其依赖的模块都通过 Loader 转换完成，根据依赖关系开始生成 Chunk</p>
+</li>
+</ol>
+</li>
+<li><p>make: 一个新的 Compilation 创建完毕，即将从 Entry 开始读取文件，根据文件的类型和配置的 Loader 对文件进行编译，编译完后再找出该文件依赖的文件，递归地编译和解析。</p>
+</li>
+<li><p>after-compile: 一次 Compilation 执行完成。</p>
+</li>
+<li><p>invalid: 当遇到文件不存在、文件编译错误等异常时会触发该事件，该事件不会导致 Webpack 退出。</p>
+</li>
+</ol>
+<h6 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h6><ol>
+<li><p>should-emit: 所有需要输出的文件已经生成，询问插件有哪些文件需要输出，有哪些不需要输出。</p>
+</li>
+<li><p>emit: 确定好要输出哪些文件后，执行文件输出，可以在这里获取和修改输出的内容。</p>
+</li>
+<li><p>after-emit: 文件输出完毕</p>
+</li>
+<li><p>done: 如果在编译和输出的流程中遇到异常，导致 Webpack 退出，就会直接跳转到本步骤，插件可以在本事件中获取具体的错误原因。</p>
+</li>
+</ol>
+<h1 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h1><h2 id="在开发环境中使用热模块替换-HMR-协助开发"><a href="#在开发环境中使用热模块替换-HMR-协助开发" class="headerlink" title="在开发环境中使用热模块替换 HMR 协助开发"></a>在开发环境中使用热模块替换 HMR 协助开发</h2><h2 id="生产环境下自动具备的优化"><a href="#生产环境下自动具备的优化" class="headerlink" title="生产环境下自动具备的优化"></a>生产环境下自动具备的优化</h2><ul>
+<li>Tree Shaking</li>
+</ul>
+<p>Tree Shaking 只支持 ES6 模块（也就是说只支持 import 语法），Tree Shaking 的作用是将引用模块中无关的内容给过滤掉。所以在导入模块时最好可以使用 <code>import { name } from &quot;....&quot;</code> 而不是 <code>import * as name from &quot;...&quot;</code></p>
+<p>Tree Shaking 会在生产环境中自动开启。</p>
+<p>如若想在开发环境中也使用 Tree Shaking，可以在 optimization 中配置 <code>usedExports: true</code></p>
+<ul>
+<li>压缩混淆JS代码</li>
+</ul>
+<p>生产环境 Webpack 会默认压缩混淆 JS 代码。</p>
+<h2 id="可以在生产环境关闭-devtool"><a href="#可以在生产环境关闭-devtool" class="headerlink" title="可以在生产环境关闭 devtool"></a>可以在生产环境关闭 devtool</h2><p>devtool 的作用是提供 sorceMap，如若不需要在生产环境进行调试，可以在生产环境关闭 devtool。开发环境中可以使用 <code>cheap-module-eval-source-map</code> 或者 <code>cheap-eval-source-map</code>。</p>
+<blockquote>
+<p><a href="https://www.webpackjs.com/configuration/devtool/" target="_blank" rel="noopener">devtool 几种配置的区别</a></p>
+</blockquote>
+<h2 id="开启-gzip-压缩"><a href="#开启-gzip-压缩" class="headerlink" title="开启 gzip 压缩"></a>开启 gzip 压缩</h2><h2 id="Code-Splitting"><a href="#Code-Splitting" class="headerlink" title="Code Splitting"></a>Code Splitting</h2><p>代码分割或者说懒加载，它的作用就是把 js 分割成几份，在用户需要加载时才加载，这样不用一次性加载所有 js。</p>
+<p>相关配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">optimization: &#123;</span><br><span class="line">    splitChunks: &#123;</span><br><span class="line">        chunks: &quot;all&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该配置项也可以结合 SplitChunksPlugin 使用。</p>
+<h2 id="CSS代码分割"><a href="#CSS代码分割" class="headerlink" title="CSS代码分割"></a>CSS代码分割</h2><p>使用 MiniCssExtractPlugin 进行 CSS 代码分割</p>
+<blockquote>
+<p><a href="https://webpack.js.org/plugins/mini-css-extract-plugin/" target="_blank" rel="noopener">MiniCssExtractPlugin文档</a></p>
+</blockquote>
+<h2 id="压缩CSS代码"><a href="#压缩CSS代码" class="headerlink" title="压缩CSS代码"></a>压缩CSS代码</h2><p>使用 OptimizeCssAssetsPlugin 进行 CSS 代码压缩(使用方法可以阅读<a href="https://webpack.js.org/plugins/mini-css-extract-plugin/" target="_blank" rel="noopener">MiniCssExtractPlugin文档</a>)</p>
+<p>如果使用了该插件压缩CSS代码后，需要自行使用 UglifyJS 进行压缩 JS 代码。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><p><a href="https://segmentfault.com/a/1190000015836090" target="_blank" rel="noopener">webpack4 的生产环境优化</a></p>
+</li>
+<li><p><a href="http://www.bookschina.com/7723448.htm" target="_blank" rel="noopener">深入浅出Webpack</a></p>
+</li>
+</ul>
+
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/webpack原理及优化/" data-title="Webpack原理及优化" data-id="ckem6w7nq0006k8vxi6m0o3dv" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Webpack/">Webpack</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/09/29/一些原生小方法/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          一些原生小方法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/09/29/React新生命周期/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">React v16.3 新生命周期</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  <div class="github-card" data-github="yuzhounanhai" data-width="100%" data-height="" data-theme="default"></div>
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/其他/">其他</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络通信/">网络通信</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/">JS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LeetCode解题/">LeetCode解题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TS/">TS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Webpack/">Webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原理/">原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JS/" style="font-size: 20px;">JS</a> <a href="/tags/LeetCode解题/" style="font-size: 12.5px;">LeetCode解题</a> <a href="/tags/React/" style="font-size: 15px;">React</a> <a href="/tags/Redux/" style="font-size: 12.5px;">Redux</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/http/" style="font-size: 15px;">http</a> <a href="/tags/原理/" style="font-size: 17.5px;">原理</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/09/29/简单实现虚拟Dom与Diff算法/">简单实现虚拟DOM与Diff算法</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/浅析VUE双向绑定原理/">浅析VUE双向绑定原理</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/深入了解AJAX/">深入了解AJAX</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/浅析Redux实现原理/">浅析Redux实现原理</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/实现符合promisea+规范/">实现符合Promise A+规范的promise</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 宇宙南海<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    
+
+<script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

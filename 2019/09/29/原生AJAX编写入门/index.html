@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>原生AJAX编写入门 | 南海の笔记</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="AJAX（Asynchronous Javascript And XML，异步Javascript和XML）是一种无需重新加载整个网页的情况下，能够更新部分网页的技术。 AJAX是通过核心对象XMLHttpRequest，使用Javascript向服务器提出请求，并处理响应。 AJAX请求分析一般的，我们在AJAX的使用上，习惯性的将请求链接、请求方法、回调函数等封装成一个对象，若AJAX请求成功">
+<meta name="keywords" content="JS,http">
+<meta property="og:type" content="article">
+<meta property="og:title" content="原生AJAX编写入门">
+<meta property="og:url" content="https://yuzhounanhai.github.io/2019/09/29/原生AJAX编写入门/index.html">
+<meta property="og:site_name" content="南海の笔记">
+<meta property="og:description" content="AJAX（Asynchronous Javascript And XML，异步Javascript和XML）是一种无需重新加载整个网页的情况下，能够更新部分网页的技术。 AJAX是通过核心对象XMLHttpRequest，使用Javascript向服务器提出请求，并处理响应。 AJAX请求分析一般的，我们在AJAX的使用上，习惯性的将请求链接、请求方法、回调函数等封装成一个对象，若AJAX请求成功">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-29T07:59:45.737Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="原生AJAX编写入门">
+<meta name="twitter:description" content="AJAX（Asynchronous Javascript And XML，异步Javascript和XML）是一种无需重新加载整个网页的情况下，能够更新部分网页的技术。 AJAX是通过核心对象XMLHttpRequest，使用Javascript向服务器提出请求，并处理响应。 AJAX请求分析一般的，我们在AJAX的使用上，习惯性的将请求链接、请求方法、回调函数等封装成一个对象，若AJAX请求成功">
+  
+    <link rel="alternate" href="/atom.xml" title="南海の笔记" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">南海の笔记</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">在海的南边，有一片宇宙！宇宙无垠，而探索无尽，是该同懒癌佛系奋斗！</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://yuzhounanhai.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-原生AJAX编写入门" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/原生AJAX编写入门/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.737Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      原生AJAX编写入门
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <p>AJAX（Asynchronous Javascript And XML，异步Javascript和XML）是一种无需重新加载整个网页的情况下，能够更新部分网页的技术。</p>
+<p>AJAX是通过核心对象XMLHttpRequest，使用Javascript向服务器提出请求，并处理响应。</p>
+<h2 id="AJAX请求分析"><a href="#AJAX请求分析" class="headerlink" title="AJAX请求分析"></a>AJAX请求分析</h2><p>一般的，我们在AJAX的使用上，习惯性的将请求链接、请求方法、回调函数等封装成一个对象，若AJAX请求成功，将触发对象中的成功回调函数。即我们的使用是这样的：</p>
+<a id="more"></a>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ajax(&#123;</span><br><span class="line">    url: <span class="string">"http://..."</span>,</span><br><span class="line">    type: <span class="string">'GET'</span>,</span><br><span class="line">    data: &#123;</span><br><span class="line">        id: <span class="string">'12345'</span>,</span><br><span class="line">        otherData: <span class="string">'some-data'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    success: <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">        <span class="comment">//function body</span></span><br><span class="line">    &#125;,</span><br><span class="line">    erro: <span class="function"><span class="keyword">function</span> (<span class="params">erroMessage</span>) </span>&#123;</span><br><span class="line">        <span class="comment">//function body</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>由上述代码可得，我们将接受的形参，是一个对象。</p>
+<p>其次，AJAX内部的简单逻辑可以分为以下几个步骤</p>
+<ol>
+<li><p>得到形参中必要的请求数据：如请求链接、请求类型、数据等；</p>
+</li>
+<li><p>实例化XMLHttpRequest对象；</p>
+</li>
+<li><p>分类型进行AJAX请求（本文主要区分GET/POST）；</p>
+</li>
+<li><p>请求回调 。</p>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ajax = <span class="function"><span class="keyword">function</span>(<span class="params">param</span>)</span>&#123;</span><br><span class="line">    <span class="comment">//解析param对象，获得必要参数</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//实例化XMLHttpRequest</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//分类型进行AJAX请求</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//请求回调</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="解析param对象"><a href="#解析param对象" class="headerlink" title="解析param对象"></a>解析param对象</h2><p>由上一步分析可得，param对象中封装了请求链接、请求方式、数据、回调函数等，解析param对象，也就是读取param对象中各个属性对应的值。可以直接通过<code>对象.属性名</code>来访问，同理也可以使用<code>对象[属性名]</code>。</p>
+<h4 id="哪些数据是必要呢？"><a href="#哪些数据是必要呢？" class="headerlink" title="哪些数据是必要呢？"></a>哪些数据是必要呢？</h4><ul>
+<li><p>请求链接url是必要的，没有url则无法知晓往哪里发送请求。由此可以得到逻辑：url不存在，需要直接return；</p>
+</li>
+<li><p>请求方式是必要的，若param对象中不存在请求方式，可以人为规定使用GET方式；</p>
+</li>
+<li><p>数据不是必要的，这需要根据后端所暴露出的接口分情况讨论，但若存在数据，则需要对其进行处理；</p>
+</li>
+<li><p>回调函数不是必要的，回调函数的存在与否不会影响到ajax请求的发送，它只是作为请求结束时的一种异步的解决方案。</p>
+</li>
+</ul>
+<p>因此在这一步，我们将针对前三条逻辑，进行代码的实现：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// url必要</span></span><br><span class="line"><span class="keyword">var</span> url = param.url;</span><br><span class="line"><span class="keyword">if</span> (!url) &#123;</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 请求方式必要</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* param.type如果存在则使用param.type值，</span></span><br><span class="line"><span class="comment">* 否则使用'get'，请求类型需要大写（GET/</span></span><br><span class="line"><span class="comment">* POST），所以进行转换。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">var</span> type = (param.type || <span class="string">'get'</span>).toUpperCase();</span><br><span class="line"><span class="comment">// 数据处理</span></span><br><span class="line"><span class="keyword">var</span> data = param.data,</span><br><span class="line">    dataArr = [];</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> k <span class="keyword">in</span> data)&#123;</span><br><span class="line">    <span class="comment">// 键=值的形式存入数组</span></span><br><span class="line">    dataArr.push(k + <span class="string">"="</span> + data[k]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="实例化XMLHttpRequest对象"><a href="#实例化XMLHttpRequest对象" class="headerlink" title="实例化XMLHttpRequest对象"></a>实例化XMLHttpRequest对象</h3><p>XMLHttpRequest存在兼容性问题，因此需要做兼容性适配。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 若XMLHttpRequest存在，则实例化一个XMLHttpRequest对象</span></span><br><span class="line"><span class="keyword">var</span> xhr = XMLHttpRequest ? <span class="keyword">new</span> XMLHttpRequest() : <span class="keyword">new</span> ActiveXObject(<span class="string">"Microsoft.XMLHTTP"</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="分类型请求（GET、POST）"><a href="#分类型请求（GET、POST）" class="headerlink" title="分类型请求（GET、POST）"></a>分类型请求（GET、POST）</h2><h4 id="get和post"><a href="#get和post" class="headerlink" title="get和post"></a>get和post</h4><p>HTTP方法中常见的有get、post、put、delete、head，这五个方法分别应用在不同的场景，而在五个方法中最为常见的是GET和POST两个方法。</p>
+<p>区别: GET和POST最明显可见的区别，就在传输方式和安全性上。具备一定知识的同学一定知道，GET方法会将参数、数据暴露在url地址栏上，POST则将数据传入请求体中；其次在安全性上post会比get安全的多。</p>
+<p>其实这两点已经是最为主要的区别了，更多的区别则在于这两点的拓展上：</p>
+<ul>
+<li><p>GET在浏览器回退时是无害的，POST则会再次发送请求；</p>
+</li>
+<li><p>GET产生的URL可以收藏，POST不可以；</p>
+</li>
+<li><p>GET请求会被浏览器主动缓存，POST需手动设置；</p>
+</li>
+<li><p>GET请求只支持url编码，POST支持多种编码方法；</p>
+</li>
+<li><p>GET请求的参数会被保存在历史记录中（URL保存在历史记录中），POST的参数不会保留；</p>
+</li>
+<li><p>GET请求在URL中传送的参数有限制（其实是URL长度有限制），POST没有限制；</p>
+</li>
+<li><p>GET请求只接受ASCII字符，POST可接受有数据类型的参数；</p>
+</li>
+<li><p>GET请求参数通过URL传递，POST则放置在Request Body中；</p>
+</li>
+<li><p>POST比GET安全，因为GET请求的参数直接暴露在URL上，所以不能放置敏感信息，如密码等。</p>
+</li>
+</ul>
+<h4 id="xhr-open-method-url-async"><a href="#xhr-open-method-url-async" class="headerlink" title="xhr.open(method, url, async)"></a>xhr.open(method, url, async)</h4><ul>
+<li><p>method：string，请求方式：’GET’/‘POST’；</p>
+</li>
+<li><p>url：string，请求地址；</p>
+</li>
+<li><p>async：boolean，是否异步请求：true/false。</p>
+</li>
+</ul>
+<h4 id="xhr-setRequestHeader-header-value"><a href="#xhr-setRequestHeader-header-value" class="headerlink" title="xhr.setRequestHeader(header, value);"></a>xhr.setRequestHeader(header, value);</h4><p>设置请求头。</p>
+<ul>
+<li><p>header：请求头名；</p>
+</li>
+<li><p>value：该请求头所对应的值。</p>
+</li>
+</ul>
+<h4 id="xhr-send-message"><a href="#xhr-send-message" class="headerlink" title="xhr.send(message)"></a>xhr.send(message)</h4><ul>
+<li>message：仅当POST请求时可用。</li>
+</ul>
+<h4 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h4><p>使用if-else分支实现分类型请求。</p>
+<p>一般的AJAX请求</p>
+<p>如果是get请求，则需要拼接url地址，即拼接成 http://…..?属性1=值&amp;属性2=值 这种形式，然后发送；如果是post请求，则需要将数据包含在request body中。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="string">'GET'</span> == type)&#123;</span><br><span class="line">    url = url + dataArr.join(<span class="string">'&amp;'</span>);</span><br><span class="line">    xhr.open(type, url);</span><br><span class="line">    xhr.send();</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    xhr.open(type, url);</span><br><span class="line">    xhr.setRequestHeader(<span class="string">"Content-type"</span>, <span class="string">"application/x-www-form-urlencode"</span>);</span><br><span class="line">    xhr.send(dataArr.join(<span class="string">'&amp;'</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="请求回调"><a href="#请求回调" class="headerlink" title="请求回调"></a>请求回调</h2><p>xhr.onload提供了xhr请求结束时的相关操作。在这一阶段，进行事件回调。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">xhr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">// 返回的http状态码为200即http请求为ok</span></span><br><span class="line">    <span class="keyword">if</span>(xhr.status === <span class="number">200</span>)&#123;</span><br><span class="line">        <span class="keyword">var</span> res;</span><br><span class="line">        <span class="comment">// 如果存在param.success并且是函数</span></span><br><span class="line">        <span class="keyword">if</span>(param.success &amp;&amp; param.success <span class="keyword">instanceof</span> <span class="built_in">Function</span>)&#123;</span><br><span class="line">            res = xhr.responseText;</span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">typeof</span> res === <span class="string">'string'</span>)&#123;</span><br><span class="line">                res = <span class="built_in">JSON</span>.parse(res);</span><br><span class="line">                param.success.call(xhr, res);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="错误回调"><a href="#错误回调" class="headerlink" title="错误回调"></a>错误回调</h2><p>造成错误的情况有：</p>
+<ul>
+<li>服务器明确返回错误状态码</li>
+<li>timeout（没有接到响应）</li>
+<li>跨域（请求没有发出）</li>
+<li>其他情况</li>
+</ul>
+<p>在明确接到错误状态码如500等，此时错误的回调应该在<code>onload</code>中进行调用，而跨域这一种请求没有发出便已经被浏览器拦截的则是在<code>onerror</code>中进行回调。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">xhr.onload = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> res;</span><br><span class="line">    <span class="keyword">if</span> (xhr.status === <span class="number">200</span>) &#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (param.fail &amp;&amp; param.fail <span class="keyword">instanceof</span> <span class="built_in">Function</span>) &#123;</span><br><span class="line">            res = xhr.responseText;</span><br><span class="line">            <span class="keyword">var</span> info = &#123;</span><br><span class="line">                errorCode: xhr.status,</span><br><span class="line">                errorText: xhr.responseText</span><br><span class="line">            &#125;;</span><br><span class="line">            param.fail.call(xhr, info);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">xhr.onerror = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (param.fail &amp;&amp; param.fail <span class="keyword">instanceof</span> <span class="built_in">Function</span>) &#123;</span><br><span class="line">        param.fail.call(xhr, &#123;</span><br><span class="line">            errorText: xhr.responseText</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>六、完整代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ajax = <span class="function"><span class="keyword">function</span> (<span class="params">param</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> url = param.url;</span><br><span class="line">    <span class="keyword">if</span> (!url) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> type = (param.type || <span class="string">"get"</span>).toUpperCase(),</span><br><span class="line">        data = param.data,</span><br><span class="line">        dataArr = [];</span><br><span class="line">    <span class="keyword">if</span> (data &amp;&amp; type === <span class="string">'GET'</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> k <span class="keyword">in</span> data) &#123;</span><br><span class="line">            dataArr.push(k + <span class="string">"="</span> + data[k]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> xhr = XMLHttpRequest ?</span><br><span class="line">        <span class="keyword">new</span> XMLHttpRequest() :</span><br><span class="line">        <span class="keyword">new</span> ActiveXObject(<span class="string">"Microsoft.XMLHTTP"</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="string">"GET"</span> === type) &#123;</span><br><span class="line">        url += <span class="string">"?"</span> + dataArr.join(<span class="string">"&amp;"</span>);</span><br><span class="line">        xhr.open(type, url);</span><br><span class="line">        <span class="comment">// 允许跨域</span></span><br><span class="line">        xhr.withCredentials = <span class="literal">true</span>;</span><br><span class="line">        xhr.send();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        xhr.open(type, url);</span><br><span class="line">        <span class="comment">// 允许跨域</span></span><br><span class="line">        xhr.withCredentials = <span class="literal">true</span>;</span><br><span class="line">        <span class="comment">// 一些requestHeader的处理</span></span><br><span class="line">        <span class="comment">// if (!(data instanceof FormData)) &#123;</span></span><br><span class="line">        <span class="comment">//     xhr.setRequestHeader("content-type", param.contentType || "application/json");</span></span><br><span class="line">        <span class="comment">// &#125;</span></span><br><span class="line">        xhr.send(data);</span><br><span class="line">    &#125;</span><br><span class="line">    xhr.onload = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> res;</span><br><span class="line">        <span class="keyword">if</span> (xhr.status === <span class="number">200</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (param.success &amp;&amp; param.success <span class="keyword">instanceof</span> <span class="built_in">Function</span>) &#123;</span><br><span class="line">                res = xhr.responseText;</span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">typeof</span> res === <span class="string">"string"</span>) &#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        param.success.call(xhr, <span class="built_in">JSON</span>.parse(res));</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">                        param.success.call(xhr, res);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (param.fail &amp;&amp; param.fail <span class="keyword">instanceof</span> <span class="built_in">Function</span>) &#123;</span><br><span class="line">                res = xhr.responseText;</span><br><span class="line">                <span class="keyword">var</span> info = &#123;</span><br><span class="line">                    errorCode: xhr.status,</span><br><span class="line">                    errorText: xhr.responseText</span><br><span class="line">                &#125;;</span><br><span class="line">                param.fail.call(xhr, info);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (param.complete &amp;&amp; param.complete <span class="keyword">instanceof</span> <span class="built_in">Function</span>) &#123;</span><br><span class="line">            param.complete.call(xhr);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    xhr.onerror = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (param.fail &amp;&amp; param.fail <span class="keyword">instanceof</span> <span class="built_in">Function</span>) &#123;</span><br><span class="line">            param.fail.call(xhr, &#123;</span><br><span class="line">                errorText: xhr.responseText</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (param.complete &amp;&amp; param.complete <span class="keyword">instanceof</span> <span class="built_in">Function</span>) &#123;</span><br><span class="line">            param.complete.call(xhr);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    xhr.onprogress = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (param.progress &amp;&amp; param.progress <span class="keyword">instanceof</span> <span class="built_in">Function</span>) &#123;</span><br><span class="line">            param.progress.call(xhr, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/原生AJAX编写入门/" data-title="原生AJAX编写入门" data-id="ckem6w7p40017k8vxxyhqkxi5" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/">http</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/09/29/实现符合promisea+规范/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          实现符合Promise A+规范的promise
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/09/29/初识Redux/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">初识Redux</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  <div class="github-card" data-github="yuzhounanhai" data-width="100%" data-height="" data-theme="default"></div>
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/其他/">其他</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络通信/">网络通信</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/">JS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LeetCode解题/">LeetCode解题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TS/">TS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Webpack/">Webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原理/">原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JS/" style="font-size: 20px;">JS</a> <a href="/tags/LeetCode解题/" style="font-size: 12.5px;">LeetCode解题</a> <a href="/tags/React/" style="font-size: 15px;">React</a> <a href="/tags/Redux/" style="font-size: 12.5px;">Redux</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/http/" style="font-size: 15px;">http</a> <a href="/tags/原理/" style="font-size: 17.5px;">原理</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/09/29/简单实现虚拟Dom与Diff算法/">简单实现虚拟DOM与Diff算法</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/浅析VUE双向绑定原理/">浅析VUE双向绑定原理</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/深入了解AJAX/">深入了解AJAX</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/浅析Redux实现原理/">浅析Redux实现原理</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/实现符合promisea+规范/">实现符合Promise A+规范的promise</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 宇宙南海<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    
+
+<script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
