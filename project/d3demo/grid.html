@@ -5,19 +5,20 @@
   
 
   
-  <title>Category: 其他 | 南海の笔记</title>
+  <title>南海の笔记</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="敲重点，只是笔记啦！">
+  <meta name="description" content="Document        .grid line {       stroke: #000;     }        https://blog.csdn.net/tianxuzhang/article/details/44497785           var w = 960,         h = 500,         p = 20,         x">
 <meta name="keywords" content="前端;JavaScript;CSS;JS;HTML;ES6">
 <meta property="og:type" content="website">
 <meta property="og:title" content="南海の笔记">
-<meta property="og:url" content="https://yuzhounanhai.github.io/categories/其他/index.html">
+<meta property="og:url" content="https://yuzhounanhai.github.io/project/d3demo/grid.html">
 <meta property="og:site_name" content="南海の笔记">
-<meta property="og:description" content="敲重点，只是笔记啦！">
+<meta property="og:description" content="Document        .grid line {       stroke: #000;     }        https://blog.csdn.net/tianxuzhang/article/details/44497785           var w = 960,         h = 500,         p = 20,         x">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-09-03T02:34:27.420Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="南海の笔记">
-<meta name="twitter:description" content="敲重点，只是笔记啦！">
+<meta name="twitter:description" content="Document        .grid line {       stroke: #000;     }        https://blog.csdn.net/tianxuzhang/article/details/44497785           var w = 960,         h = 500,         p = 20,         x">
   
     <link rel="alternate" href="/atom.xml" title="南海の笔记" type="application/atom+xml">
   
@@ -68,69 +69,83 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/09/25/easy-mock环境搭建/" class="archive-article-date">
-  <time datetime="2020-09-25T06:41:29.921Z" itemprop="datePublished">9月 25</time>
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/project/d3demo/grid.html" class="article-date">
+  <time datetime="2020-09-03T02:34:27.420Z" itemprop="datePublished">2020-09-03</time>
 </a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/09/25/easy-mock环境搭建/">EasyMock 环境搭建</a>
-    </h1>
-  
-
-    </header>
+    
   </div>
-</article>
-  
+  <div class="article-inner">
     
     
+    <div class="article-entry" itemprop="articleBody">
       
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
+        
+          <html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .grid line {
+      stroke: #000;
+    }
+  </style>
+</head>
+<body>
+  <p>https://blog.csdn.net/tianxuzhang/article/details/44497785</p>
+  <script src="https://d3js.org/d3.v5.js"></script>
+  <script>
+    var w = 960,
+        h = 500,
+        p = 20,
+        x = d3.scaleLinear().domain([0, 1]).range([p, w - p]),
+        y = d3.scaleLinear().domain([0, 1]).range([h - p, p]);
+    var svg = d3
+      .select('body')
+      .append('svg')
+      .attr('width', w)
+      .attr('height', h);
     
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/09/29/generator笔记/" class="archive-article-date">
-  <time datetime="2019-09-29T07:59:45.734Z" itemprop="datePublished">9月 29</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/09/29/generator笔记/">generator摘录笔记</a>
-    </h1>
-  
+    var grid = svg
+      .selectAll('.grid')
+      .data(x.ticks(10))
+      .enter()
+      .append('g')
+      .attr('class', 'grid');
 
-    </header>
+    // 绘制竖线
+    grid
+      .append('line')
+      .attr("x1", x)
+      .attr("x2", x)
+      .attr("y1", p)
+      .attr("y2", h - p - 1);
+
+    // 绘制横线
+    grid.append("line")
+      .attr("y1", y)
+      .attr("y2", y)
+      .attr("x1", p)
+      .attr("x2", w - p + 1);
+  </script>
+</body>
+</html>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/project/d3demo/grid.html" data-title="" data-id="ckg20pgld001poovxy4oinjp2" class="article-share-link">分享</a>
+      
+      
+    </footer>
   </div>
+  
+    
+  
 </article>
-  
-  
-    </div></section>
-  
-
 
 </section>
         

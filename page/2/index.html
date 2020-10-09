@@ -70,6 +70,67 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-webpack原理及优化" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/webpack原理及优化/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.735Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/29/webpack原理及优化/">Webpack原理及优化</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <p>Webpack 是一个黑盒，内部有其自我的一套运行流程，开发人员无需关注其内部做了什么，仅需通过 Webpack 所暴露出的配置字段进行配置，即可达到模块打包的目的。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><ul>
+<li><p>Entry 入口， webpack 执行构建的第一步将从 Entry 开始，可抽象成输入。</p>
+</li>
+<li><p>Module 模块，在 webpack 里一切皆模块， 一个模块对应一个文件。 Webpack 会从配置的 Entry 开始，递归找出所有依赖的模块。</p>
+</li>
+<li><p>Chunk 代码块 Chunk 由多个模块组合而成，用于代码合并与分割。</p>
+</li>
+<li><p>Loader 模块转换器，用于将模块的原内容按照需求转换成新内容。</p>
+</li>
+<li><p>Plugin 扩展插件，在 Webpack 构建流程中的特定时机会广播对应的事件，插件可以监听这些事件的发生，在特定的时机做对应的事情</p>
+</li>
+</ul>
+        
+        
+          <p class="article-more-link">
+            <a href="/2019/09/29/webpack原理及优化/#more">查看更多</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/webpack原理及优化/" data-title="Webpack原理及优化" data-id="ckg20pgjd0006oovxcuv0lc69" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Webpack/">Webpack</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-generator笔记" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/09/29/generator笔记/" class="article-date">
@@ -110,10 +171,66 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/generator笔记/" data-title="generator摘录笔记" data-id="ckem6w7om000yk8vxduilnj9m" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/generator笔记/" data-title="generator摘录笔记" data-id="ckg20pgkl0014oovxg50efuyf" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/笔记/">笔记</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-React新生命周期" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/React新生命周期/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.734Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/29/React新生命周期/">React v16.3 新生命周期</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <p>React打算在 v17 版本推出新的 Async Rendering，提出一种可被打断的生命周期的形式，并在 v16 版本中为即将上线的这一功能做出兼容升级。（生命周期一旦被打断，下次恢复的时候又会再跑一次之前的生命周期，因此 <code>componentWillMount</code>，<code>componentWillReceiveProps</code>， <code>componentWillUpdate</code> 都不能保证只在挂载/拿到props/状态变化的时候刷新一次）</p>
+<h2 id="不安全的生命周期"><a href="#不安全的生命周期" class="headerlink" title="不安全的生命周期"></a>不安全的生命周期</h2><p>随着 React 团队在 v17 版本推出的新功能上的实践，发现一些生命周期可能会带来一些危险性，这些生命周期方法经常被误解和巧妙地误用；此外，React 团队预计，对于异步渲染，它们潜在的误用可能会造成更多问题。v16.3版本发布后，官方文档中已经为这些容易出现问题的生命周期添加了 “<code>UNSAFE_</code>” 前缀。</p>
+<p>这些生命周期是：</p>
+<ul>
+<li>componentWillMount</li>
+<li>componentWillReceiveProps</li>
+<li>componentWillUpdate</li>
+</ul>
+        
+        
+          <p class="article-more-link">
+            <a href="/2019/09/29/React新生命周期/#more">查看更多</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/React新生命周期/" data-title="React v16.3 新生命周期" data-id="ckg20pgkj0012oovx0001fd4w" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li></ul>
 
     </footer>
   </div>
@@ -163,7 +280,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/React升级支持Typescript/" data-title="React 升级支持 Typescript" data-id="ckem6w7nn0004k8vxme08d8yz" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/React升级支持Typescript/" data-title="React 升级支持 Typescript" data-id="ckg20pgj30001oovxbkkjhmin" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TS/">TS</a></li></ul>
@@ -222,7 +339,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/LeetCode/1-two-sum/" data-title="两数相加" data-id="ckem6w7pa001ck8vx87rkwlrg" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/LeetCode/1-two-sum/" data-title="两数相加" data-id="ckg20pgli001uoovx3cd2zkrp" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LeetCode解题/">LeetCode解题</a></li></ul>
@@ -280,7 +397,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/LeetCode/15-3sum/" data-title="三数相加" data-id="ckem6w7pm001nk8vxq9luu826" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/LeetCode/15-3sum/" data-title="三数相加" data-id="ckg20pgll001yoovx346jcm5k" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LeetCode解题/">LeetCode解题</a></li></ul>
@@ -331,7 +448,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/JavaScript是怎样工作的/" data-title="JavaScript 是怎样工作的" data-id="ckem6w7oi000vk8vxbju0czie" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/JavaScript是怎样工作的/" data-title="JavaScript 是怎样工作的" data-id="ckg20pgkg0011oovxuzv8jd96" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原理/">原理</a></li></ul>
@@ -380,7 +497,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/JavaScript原生API实现/" data-title="原生API的实现" data-id="ckem6w7n80000k8vx6vu0qh0w" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/JavaScript原生API实现/" data-title="原生API的实现" data-id="ckg20pgj90004oovxm1q81jmy" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原理/">原理</a></li></ul>
@@ -431,7 +548,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/HTTP协议总结归纳/" data-title="HTTP协议总结归纳" data-id="ckem6w7nh0001k8vxctryi37s" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/HTTP协议总结归纳/" data-title="HTTP协议总结归纳" data-id="ckg20pgiu0000oovxviti1x9k" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/">http</a></li></ul>
@@ -469,7 +586,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/">JS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LeetCode解题/">LeetCode解题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TS/">TS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Webpack/">Webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原理/">原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/">JS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LeetCode解题/">LeetCode解题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TS/">TS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Webpack/">Webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react-dom/">react-dom</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react-reconciler/">react-reconciler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原理/">原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li></ul>
     </div>
   </div>
 
@@ -479,7 +596,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JS/" style="font-size: 20px;">JS</a> <a href="/tags/LeetCode解题/" style="font-size: 12.5px;">LeetCode解题</a> <a href="/tags/React/" style="font-size: 15px;">React</a> <a href="/tags/Redux/" style="font-size: 12.5px;">Redux</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/http/" style="font-size: 15px;">http</a> <a href="/tags/原理/" style="font-size: 17.5px;">原理</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+      <a href="/tags/JS/" style="font-size: 20px;">JS</a> <a href="/tags/LeetCode解题/" style="font-size: 12.5px;">LeetCode解题</a> <a href="/tags/React/" style="font-size: 17.5px;">React</a> <a href="/tags/Redux/" style="font-size: 12.5px;">Redux</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/http/" style="font-size: 15px;">http</a> <a href="/tags/react-dom/" style="font-size: 10px;">react-dom</a> <a href="/tags/react-reconciler/" style="font-size: 10px;">react-reconciler</a> <a href="/tags/原理/" style="font-size: 17.5px;">原理</a> <a href="/tags/笔记/" style="font-size: 12.5px;">笔记</a>
     </div>
   </div>
 
@@ -488,7 +605,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li></ul>
     </div>
   </div>
 
@@ -501,11 +618,15 @@
       <ul>
         
           <li>
-            <a href="/2019/09/29/简单实现虚拟Dom与Diff算法/">简单实现虚拟DOM与Diff算法</a>
+            <a href="/2020/09/25/自定义React渲染器/">自定义React渲染器</a>
           </li>
         
           <li>
-            <a href="/2019/09/29/浅析VUE双向绑定原理/">浅析VUE双向绑定原理</a>
+            <a href="/2020/09/25/easy-mock环境搭建/">EasyMock 环境搭建</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/简单实现虚拟Dom与Diff算法/">简单实现虚拟DOM与Diff算法</a>
           </li>
         
           <li>
@@ -513,11 +634,7 @@
           </li>
         
           <li>
-            <a href="/2019/09/29/浅析Redux实现原理/">浅析Redux实现原理</a>
-          </li>
-        
-          <li>
-            <a href="/2019/09/29/实现符合promisea+规范/">实现符合Promise A+规范的promise</a>
+            <a href="/2019/09/29/浅析VUE双向绑定原理/">浅析VUE双向绑定原理</a>
           </li>
         
       </ul>
