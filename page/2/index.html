@@ -114,10 +114,63 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/初识Redux/" data-title="初识Redux" data-id="ckhlo13eo000nacvx1dgi2ygn" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/初识Redux/" data-title="初识Redux" data-id="ckhlo53qt000bskvxpbcjorml" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redux/">Redux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-一些原生小方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/一些原生小方法/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.735Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/29/一些原生小方法/">一些原生小方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <ul>
+<li>addClass<br>往node或者nodelist中添加class<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addClass</span>(<span class="params">$els, classNames</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">addOneClass</span>(<span class="params">$el, classNames</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> resultClass = $el.className.split(<span class="string">" "</span>);</span><br><span class="line">        <span class="keyword">var</span> newClassNames = classNames.split(<span class="string">" "</span>);</span><br><span class="line">        newClassNames.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">newClass</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (resultClass.indexOf(newClass) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                resultClass.push(newClass);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        $el.className = resultClass.join(<span class="string">" "</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ($els <span class="keyword">instanceof</span> Node) &#123;</span><br><span class="line">        addOneClass($els, classNames);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; $els.length; i++) &#123;</span><br><span class="line">            addOneClass($els[i], classNames);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+        
+        
+          <p class="article-more-link">
+            <a href="/2019/09/29/一些原生小方法/#more">查看更多</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/一些原生小方法/" data-title="一些原生小方法" data-id="ckhlo53qr000askvxj8cy6tb6" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li></ul>
 
     </footer>
   </div>
@@ -175,63 +228,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/webpack原理及优化/" data-title="Webpack原理及优化" data-id="ckhlo13ej000kacvxqf8euwiy" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/webpack原理及优化/" data-title="Webpack原理及优化" data-id="ckhlo53qk0006skvxh7uml2qy" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Webpack/">Webpack</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-一些原生小方法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/09/29/一些原生小方法/" class="article-date">
-  <time datetime="2019-09-29T07:59:45.735Z" itemprop="datePublished">2019-09-29</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/29/一些原生小方法/">一些原生小方法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-          <ul>
-<li>addClass<br>往node或者nodelist中添加class<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addClass</span>(<span class="params">$els, classNames</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">addOneClass</span>(<span class="params">$el, classNames</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> resultClass = $el.className.split(<span class="string">" "</span>);</span><br><span class="line">        <span class="keyword">var</span> newClassNames = classNames.split(<span class="string">" "</span>);</span><br><span class="line">        newClassNames.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">newClass</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (resultClass.indexOf(newClass) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                resultClass.push(newClass);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        $el.className = resultClass.join(<span class="string">" "</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ($els <span class="keyword">instanceof</span> Node) &#123;</span><br><span class="line">        addOneClass($els, classNames);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; $els.length; i++) &#123;</span><br><span class="line">            addOneClass($els[i], classNames);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-        
-        
-          <p class="article-more-link">
-            <a href="/2019/09/29/一些原生小方法/#more">查看更多</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/一些原生小方法/" data-title="一些原生小方法" data-id="ckhlo13ee000hacvxbqiqa3ir" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li></ul>
 
     </footer>
   </div>
@@ -284,7 +284,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/React新生命周期/" data-title="React v16.3 新生命周期" data-id="ckhlo13g4001cacvxjexxccyt" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/React新生命周期/" data-title="React v16.3 新生命周期" data-id="ckhlo53sx001askvxdoca0czj" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li></ul>
@@ -336,7 +336,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/generator笔记/" data-title="generator摘录笔记" data-id="ckhlo13g0001aacvxw56l8jy9" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/generator笔记/" data-title="generator摘录笔记" data-id="ckhlo53t2001dskvx7d4hbfcv" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/笔记/">笔记</a></li></ul>
@@ -389,7 +389,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/React升级支持Typescript/" data-title="React 升级支持 Typescript" data-id="ckhlo13e3000cacvxoojd4js6" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/React升级支持Typescript/" data-title="React 升级支持 Typescript" data-id="ckhlo53q70001skvxlgw7if0z" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TS/">TS</a></li></ul>
@@ -447,7 +447,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/LeetCode/15-3sum/" data-title="三数相加" data-id="ckhlo13hj0022acvxq1aeyqao" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/LeetCode/15-3sum/" data-title="三数相加" data-id="ckhlo53vr002rskvx2pz5ijd3" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LeetCode解题/">LeetCode解题</a></li></ul>
@@ -506,7 +506,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/LeetCode/1-two-sum/" data-title="两数相加" data-id="ckhlo13gg001kacvx5rme71o1" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/LeetCode/1-two-sum/" data-title="两数相加" data-id="ckhlo53vw002uskvxvwtquqio" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LeetCode解题/">LeetCode解题</a></li></ul>
@@ -557,7 +557,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/JavaScript是怎样工作的/" data-title="JavaScript 是怎样工作的" data-id="ckhlo13ea000facvxuvcy0kb9" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/JavaScript是怎样工作的/" data-title="JavaScript 是怎样工作的" data-id="ckhlo53st0018skvxxy9za4jg" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原理/">原理</a></li></ul>
@@ -606,7 +606,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/JavaScript原生API实现/" data-title="原生API的实现" data-id="ckhlo13d70001acvxy2k6iudw" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/JavaScript原生API实现/" data-title="原生API的实现" data-id="ckhlo53qe0004skvx7kcio8c0" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原理/">原理</a></li></ul>

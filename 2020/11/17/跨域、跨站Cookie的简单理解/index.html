@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="南海の笔记">
 <meta property="og:description" content="本文将对跨域/跨站Cookie的相关知识点做一个简单的理解性质的总结梳理. 前端跨域浏览器的同源策略是导致前端出现跨域问题的主要原因. 什么是同源策略同源策略是指在Web浏览器中，允许某个网页脚本访问另一个网页的数据，但前提是这两个网页必须有相同的URI、主机名和端口号，一旦两个网站满足上述条件，这两个网站就被认定为具有相同来源。此策略可防止某个网页上的恶意脚本通过该页面的文档对象模型访问另一网页">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-11-17T07:37:36.918Z">
+<meta property="og:updated_time" content="2020-11-17T07:41:00.708Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="跨域、跨站Cookie的简单理解">
 <meta name="twitter:description" content="本文将对跨域/跨站Cookie的相关知识点做一个简单的理解性质的总结梳理. 前端跨域浏览器的同源策略是导致前端出现跨域问题的主要原因. 什么是同源策略同源策略是指在Web浏览器中，允许某个网页脚本访问另一个网页的数据，但前提是这两个网页必须有相同的URI、主机名和端口号，一旦两个网站满足上述条件，这两个网站就被认定为具有相同来源。此策略可防止某个网页上的恶意脚本通过该页面的文档对象模型访问另一网页">
@@ -110,7 +110,55 @@
 <a id="more"></a>
 
 <p>相关示例如下:</p>
-<p>:–:|:–:|:–:<br>URL|结果|原因<br><a href="http://www.example.com/dir/page2.html|是|只有路径不同" target="_blank" rel="noopener">http://www.example.com/dir/page2.html|是|只有路径不同</a><br><a href="http://www.example.com/dir2/other.html|是|只有路径不同" target="_blank" rel="noopener">http://www.example.com/dir2/other.html|是|只有路径不同</a><br><a href="http://username:password@www.example.com/dir2/other.html|是|只有路径不同" target="_blank" rel="noopener">http://username:password@www.example.com/dir2/other.html|是|只有路径不同</a><br><a href="http://www.example.com:81/dir/other.html|否|不同端口（若未标明，http://" target="_blank" rel="noopener">http://www.example.com:81/dir/other.html|否|不同端口（若未标明，http://</a> 默认端口号为80）<br><a href="https://www.example.com/dir/other.html|否|不同协议（https和http）" target="_blank" rel="noopener">https://www.example.com/dir/other.html|否|不同协议（https和http）</a><br><a href="http://en.example.com/dir/other.html|否|不同域名" target="_blank" rel="noopener">http://en.example.com/dir/other.html|否|不同域名</a><br><a href="http://example.com/dir/other.html|否|不同域名（需要完全匹配）" target="_blank" rel="noopener">http://example.com/dir/other.html|否|不同域名（需要完全匹配）</a><br><a href="http://v2.www.example.com/dir/other.html|否|不同域名（需要完全匹配）" target="_blank" rel="noopener">http://v2.www.example.com/dir/other.html|否|不同域名（需要完全匹配）</a></p>
+<table>
+<thead>
+<tr>
+<th align="center">URL</th>
+<th align="center">结果</th>
+<th align="center">原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><a href="http://www.example.com/dir/page2.html" target="_blank" rel="noopener">http://www.example.com/dir/page2.html</a></td>
+<td align="center">是</td>
+<td align="center">只有路径不同</td>
+</tr>
+<tr>
+<td align="center"><a href="http://www.example.com/dir2/other.html" target="_blank" rel="noopener">http://www.example.com/dir2/other.html</a></td>
+<td align="center">是</td>
+<td align="center">只有路径不同</td>
+</tr>
+<tr>
+<td align="center"><a href="http://username:password@www.example.com/dir2/other.html" target="_blank" rel="noopener">http://username:password@www.example.com/dir2/other.html</a></td>
+<td align="center">是</td>
+<td align="center">只有路径不同</td>
+</tr>
+<tr>
+<td align="center"><a href="http://www.example.com:81/dir/other.html" target="_blank" rel="noopener">http://www.example.com:81/dir/other.html</a></td>
+<td align="center">否</td>
+<td align="center">不同端口（若未标明，http:// 默认端口号为80）</td>
+</tr>
+<tr>
+<td align="center"><a href="https://www.example.com/dir/other.html" target="_blank" rel="noopener">https://www.example.com/dir/other.html</a></td>
+<td align="center">否</td>
+<td align="center">不同协议（https和http）</td>
+</tr>
+<tr>
+<td align="center"><a href="http://en.example.com/dir/other.html" target="_blank" rel="noopener">http://en.example.com/dir/other.html</a></td>
+<td align="center">否</td>
+<td align="center">不同域名</td>
+</tr>
+<tr>
+<td align="center"><a href="http://example.com/dir/other.html" target="_blank" rel="noopener">http://example.com/dir/other.html</a></td>
+<td align="center">否</td>
+<td align="center">不同域名（需要完全匹配）</td>
+</tr>
+<tr>
+<td align="center"><a href="http://v2.www.example.com/dir/other.html" target="_blank" rel="noopener">http://v2.www.example.com/dir/other.html</a></td>
+<td align="center">否</td>
+<td align="center">不同域名（需要完全匹配）</td>
+</tr>
+</tbody></table>
 <h2 id="跨域解决方式-跨源资源共享-CORS"><a href="#跨域解决方式-跨源资源共享-CORS" class="headerlink" title="跨域解决方式: 跨源资源共享(CORS)"></a>跨域解决方式: 跨源资源共享(CORS)</h2><p>前端解决跨域有很多方式, 如JsonP/WebSocket等, 其中最简单的方式是 <code>CORS</code>.</p>
 <p>前端浏览器将默认支持<code>CORS</code>(部分低版本浏览器, 如IE8/9浏览器需要前端进行兼容性解决), 也就是说实现 <code>CORS</code> 的关键是后端. 只要后端实现了 <code>CORS</code>, 就实现了跨域.</p>
 <h4 id="后端如何实现-CORS"><a href="#后端如何实现-CORS" class="headerlink" title="后端如何实现 CORS"></a>后端如何实现 <code>CORS</code></h4><p>简单来说, 只需要后端在响应时, 传递 <code>Access-Control-Allow-Origin</code> 响应头, 并将请求发送域添加至 <code>Access-Control-Allow-Origin</code> 的响应内容中, 即可实现.</p>
@@ -176,7 +224,74 @@
 </blockquote>
 <p>这个说明表示, 浏览器正在将 <code>SameSite</code> 的默认值设置为 <code>Lax</code>, 如若需要跨域(其实是跨站)发送 <code>Cookie</code>, 请设置 <code>None</code> 值选择退出 <code>SameSite</code> 限制. 设置为 <code>None</code> 值后需要同时设置 <code>Secure</code> 才会生效.</p>
 <p>这意味着, 对于跨站的请求, 即便前端设置了 <code>XMLHttpRequest.withCredentials = true</code>, 那么是否发送 Cookie 还将取决于浏览器中 <code>Cookie</code> 的 <code>SameSite</code> 属性.</p>
-<p>:–:|:–:|:–:|:–:|:–:|:–:<br>请求类型|实例|以前|Strict|Lax|None<br>链接|<code>&lt;a href=&quot;...&quot;&gt;&lt;/a&gt;</code>|发送 Cookie|不发送|发送 Cookie|发送 Cookie<br>预加载|<code>&lt;link rel=&quot;prerender&quot; href=&quot;...&quot;/&gt;</code>|发送 Cookie|不发送|发送 Cookie|发送 Cookie<br>GET 表单|<code>&lt;form method=&quot;GET&quot; action=&quot;...&quot;&gt;</code>|发送 Cookie|不发送|发送 Cookie|发送 Cookie<br>POST 表单|<code>&lt;form method=&quot;POST&quot; action=&quot;...&quot;&gt;</code>|发送 Cookie|不发送|发送 Cookie|不发送<br>iframe|<code>&lt;iframe src=&quot;...&quot;&gt;&lt;/iframe&gt;</code>|发送 Cookie|不发送|发送 Cookie|不发送<br>AJAX|<code>$.get(&quot;...&quot;)</code>|发送 Cookie|不发送|发送 Cookie|不发送<br>Image|<code>&lt;img src=&quot;...&quot;&gt;</code>|发送 Cookie|不发送|发送 Cookie|不发送</p>
+<table>
+<thead>
+<tr>
+<th align="center">请求类型</th>
+<th align="center">实例</th>
+<th align="center">以前</th>
+<th align="center">Strict</th>
+<th align="center">Lax</th>
+<th align="center">None</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">链接</td>
+<td align="center"><code>&lt;a href=&quot;...&quot;&gt;&lt;/a&gt;</code></td>
+<td align="center">发送 Cookie</td>
+<td align="center">不发送</td>
+<td align="center">发送 Cookie</td>
+<td align="center">发送 Cookie</td>
+</tr>
+<tr>
+<td align="center">预加载</td>
+<td align="center"><code>&lt;link rel=&quot;prerender&quot; href=&quot;...&quot;/&gt;</code></td>
+<td align="center">发送 Cookie</td>
+<td align="center">不发送</td>
+<td align="center">发送 Cookie</td>
+<td align="center">发送 Cookie</td>
+</tr>
+<tr>
+<td align="center">GET 表单</td>
+<td align="center"><code>&lt;form method=&quot;GET&quot; action=&quot;...&quot;&gt;</code></td>
+<td align="center">发送 Cookie</td>
+<td align="center">不发送</td>
+<td align="center">发送 Cookie</td>
+<td align="center">发送 Cookie</td>
+</tr>
+<tr>
+<td align="center">POST 表单</td>
+<td align="center"><code>&lt;form method=&quot;POST&quot; action=&quot;...&quot;&gt;</code></td>
+<td align="center">发送 Cookie</td>
+<td align="center">不发送</td>
+<td align="center">发送 Cookie</td>
+<td align="center">不发送</td>
+</tr>
+<tr>
+<td align="center">iframe</td>
+<td align="center"><code>&lt;iframe src=&quot;...&quot;&gt;&lt;/iframe&gt;</code></td>
+<td align="center">发送 Cookie</td>
+<td align="center">不发送</td>
+<td align="center">发送 Cookie</td>
+<td align="center">不发送</td>
+</tr>
+<tr>
+<td align="center">AJAX</td>
+<td align="center"><code>$.get(&quot;...&quot;)</code></td>
+<td align="center">发送 Cookie</td>
+<td align="center">不发送</td>
+<td align="center">发送 Cookie</td>
+<td align="center">不发送</td>
+</tr>
+<tr>
+<td align="center">Image</td>
+<td align="center"><code>&lt;img src=&quot;...&quot;&gt;</code></td>
+<td align="center">发送 Cookie</td>
+<td align="center">不发送</td>
+<td align="center">发送 Cookie</td>
+<td align="center">不发送</td>
+</tr>
+</tbody></table>
 <p>从上表关系可以得出, 严格模式完全禁止了第三方Cookie, Lax则相对放松, 而None的情况, 与浏览器未将默认值改变时的表现一致.</p>
 <h4 id="SameSite的可用性与兼容性"><a href="#SameSite的可用性与兼容性" class="headerlink" title="SameSite的可用性与兼容性"></a>SameSite的可用性与兼容性</h4><ol>
 <li>设置了 <code>SameSite</code> 为 <code>None</code> 后, 需要同时指定 <code>Secure</code> 属性, 这意味着, 你的网站需要支持 HTTPS</li>
@@ -215,7 +330,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2020/11/17/跨域、跨站Cookie的简单理解/" data-title="跨域、跨站Cookie的简单理解" data-id="ckhlo13gc001hacvx1yjgvmdy" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2020/11/17/跨域、跨站Cookie的简单理解/" data-title="跨域、跨站Cookie的简单理解" data-id="ckhlo53tk001oskvxw6001102" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Cookie/">Cookie</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/跨域/">跨域</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/跨站/">跨站</a></li></ul>
