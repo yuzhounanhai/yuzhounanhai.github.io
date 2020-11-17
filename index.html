@@ -70,6 +70,109 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-跨域、跨站Cookie的简单理解" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/17/跨域、跨站Cookie的简单理解/" class="article-date">
+  <time datetime="2020-11-17T02:14:20.199Z" itemprop="datePublished">2020-11-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/HTTP/">HTTP</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/17/跨域、跨站Cookie的简单理解/">跨域、跨站Cookie的简单理解</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <p>本文将对跨域/跨站Cookie的相关知识点做一个简单的理解性质的总结梳理.</p>
+<h2 id="前端跨域"><a href="#前端跨域" class="headerlink" title="前端跨域"></a>前端跨域</h2><p>浏览器的<code>同源策略</code>是导致前端出现跨域问题的主要原因.</p>
+<h4 id="什么是同源策略"><a href="#什么是同源策略" class="headerlink" title="什么是同源策略"></a>什么是同源策略</h4><p>同源策略是指在Web浏览器中，允许某个网页脚本访问另一个网页的数据，但前提是这两个网页必须有相同的URI、主机名和端口号，一旦两个网站满足上述条件，这两个网站就被认定为具有相同来源。此策略可防止某个网页上的恶意脚本通过该页面的文档对象模型访问另一网页上的敏感数据。</p>
+<p>同源策略对Web应用程序具有特殊意义，<strong>因为Web应用程序广泛依赖于HTTP cookie来维持用户会话，所以必须将不相关网站严格分隔，以防止丢失数据泄露</strong>。</p>
+<p>值得注意的是同源策略<strong>仅适用于脚本</strong>，这意味着某网站可以通过相应的HTML标签访问不同来源网站上的图像、CSS和动态加载脚本等资源。而<strong>跨站请求伪造就是利用同源策略不适用于HTML标签的缺陷</strong>。</p>
+<h4 id="同源的严格条件"><a href="#同源的严格条件" class="headerlink" title="同源的严格条件"></a>同源的严格条件</h4><p>同源策略认定, 在同源策略生效场景下, 若不满足以下任意一个条件, 则非同源, 即跨域:</p>
+<ol>
+<li>相同<strong>协议</strong></li>
+<li>相同<strong>域名</strong>(域名完全匹配, 子域A到子域B也不满足这一条件)</li>
+<li>相同<strong>端口</strong></li>
+</ol>
+        
+        
+          <p class="article-more-link">
+            <a href="/2020/11/17/跨域、跨站Cookie的简单理解/#more">查看更多</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2020/11/17/跨域、跨站Cookie的简单理解/" data-title="跨域、跨站Cookie的简单理解" data-id="ckhlo13gc001hacvx1yjgvmdy" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Cookie/">Cookie</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/跨域/">跨域</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/跨站/">跨站</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-回溯法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/10/23/回溯法/" class="article-date">
+  <time datetime="2020-10-23T06:33:08.673Z" itemprop="datePublished">2020-10-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/算法/">算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/23/回溯法/">回溯法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <p><b>该文章因为特殊原因暂时被锁定，无法阅读，您可以先行阅读其他文章内容。</b><p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2020/10/23/回溯法/" data-title="回溯法" data-id="ckhlo13eu000qacvxc3hg53ut" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/回溯/">回溯</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-自定义React渲染器" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/09/25/自定义React渲染器/" class="article-date">
@@ -118,7 +221,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2020/09/25/自定义React渲染器/" data-title="自定义React渲染器" data-id="ckg20rxe7002ibovx0pocw0f1" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2020/09/25/自定义React渲染器/" data-title="自定义React渲染器" data-id="ckhlo13ht0027acvxqy7kx97z" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/react-dom/">react-dom</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/react-reconciler/">react-reconciler</a></li></ul>
@@ -172,7 +275,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2020/09/25/easy-mock环境搭建/" data-title="EasyMock 环境搭建" data-id="ckg20rxbc0006bovx6rmjagbc" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2020/09/25/easy-mock环境搭建/" data-title="EasyMock 环境搭建" data-id="ckhlo13e6000dacvxcuc0lb7u" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/笔记/">笔记</a></li></ul>
@@ -225,10 +328,60 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/简单实现虚拟Dom与Diff算法/" data-title="简单实现虚拟DOM与Diff算法" data-id="ckg20rxd9001lbovx2w4nwu52" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/简单实现虚拟Dom与Diff算法/" data-title="简单实现虚拟DOM与Diff算法" data-id="ckhlo13i2002dacvxnnuji9ko" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原理/">原理</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-浅析VUE双向绑定原理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/浅析VUE双向绑定原理/" class="article-date">
+  <time datetime="2019-09-29T07:59:45.739Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/29/浅析VUE双向绑定原理/">浅析VUE双向绑定原理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <p>VUE 是一种基于数据截获来实现双向绑定的，这篇文章将浅显的分析一下 VUE 是如何实现双向绑定的，并根据原理，简要实现这部分代码。</p>
+<h2 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h2><p>MVVM 目前是一种前端开发的架构模式，其三个组成部分是模型（Model）、视图（View）、视图模型（View Model）。<br>MVVM 使视图和逻辑得以分开，交由视图模型统一管理，由数据驱动视图模型更新，从而影响视图更新；<br>而交互所造成的变动，也将反应在视图模型上。</p>
+        
+        
+          <p class="article-more-link">
+            <a href="/2019/09/29/浅析VUE双向绑定原理/#more">查看更多</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/浅析VUE双向绑定原理/" data-title="浅析VUE双向绑定原理" data-id="ckhlo13hn0024acvxuphd6clk" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vue/">Vue</a></li></ul>
 
     </footer>
   </div>
@@ -282,60 +435,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/深入了解AJAX/" data-title="深入了解AJAX" data-id="ckg20rxcu0019bovx9i0gbxer" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/深入了解AJAX/" data-title="深入了解AJAX" data-id="ckhlo13g8001eacvxh2j31cgz" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/">http</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-浅析VUE双向绑定原理" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/09/29/浅析VUE双向绑定原理/" class="article-date">
-  <time datetime="2019-09-29T07:59:45.739Z" itemprop="datePublished">2019-09-29</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/29/浅析VUE双向绑定原理/">浅析VUE双向绑定原理</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-          <p>VUE 是一种基于数据截获来实现双向绑定的，这篇文章将浅显的分析一下 VUE 是如何实现双向绑定的，并根据原理，简要实现这部分代码。</p>
-<h2 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h2><p>MVVM 目前是一种前端开发的架构模式，其三个组成部分是模型（Model）、视图（View）、视图模型（View Model）。<br>MVVM 使视图和逻辑得以分开，交由视图模型统一管理，由数据驱动视图模型更新，从而影响视图更新；<br>而交互所造成的变动，也将反应在视图模型上。</p>
-        
-        
-          <p class="article-more-link">
-            <a href="/2019/09/29/浅析VUE双向绑定原理/#more">查看更多</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/浅析VUE双向绑定原理/" data-title="浅析VUE双向绑定原理" data-id="ckg20rxea002kbovx04s3ygzn" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vue/">Vue</a></li></ul>
 
     </footer>
   </div>
@@ -386,7 +489,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/浅析Redux实现原理/" data-title="浅析Redux实现原理" data-id="ckg20rxd6001jbovxutlo22f6" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/浅析Redux实现原理/" data-title="浅析Redux实现原理" data-id="ckhlo13hy002aacvxqd74bdne" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redux/">Redux</a></li></ul>
@@ -437,7 +540,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/原生AJAX编写入门/" data-title="原生AJAX编写入门" data-id="ckg20rxcr0016bovx1imea408" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/原生AJAX编写入门/" data-title="原生AJAX编写入门" data-id="ckhlo13fx0019acvxpb4fsj34" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/">http</a></li></ul>
@@ -487,119 +590,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/实现符合promisea+规范/" data-title="实现符合Promise A+规范的promise" data-id="ckg20rxec002mbovxvgrvbg8b" class="article-share-link">分享</a>
+      <a data-url="https://yuzhounanhai.github.io/2019/09/29/实现符合promisea+规范/" data-title="实现符合Promise A+规范的promise" data-id="ckhlo13jb0035acvxvzwuthrd" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原理/">原理</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-初识Redux" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/09/29/初识Redux/" class="article-date">
-  <time datetime="2019-09-29T07:59:45.736Z" itemprop="datePublished">2019-09-29</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/29/初识Redux/">初识Redux</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-          <h2 id="Redux定义"><a href="#Redux定义" class="headerlink" title="Redux定义"></a>Redux定义</h2><blockquote>
-<p>Redux is a predictable state container for JavaScript apps.<br>对于 JavaScript 应用而言， Redux 是一个可预测状态的“容器”.</p>
-</blockquote>
-<p>上面的定义，是 Redux 官方给出的，你可以片面的将 Redux 理解为一个存储状态的容器（但并不仅仅是容器），但请不要忽略上面定义中的关键词：可预测状态。</p>
-<blockquote>
-<p>Redux 是库结合模式</p>
-</blockquote>
-<p>Redux 是一个库，这个库体积很小，并且库内的实现十分优雅。但 Redux 与传统的库不同，它在提供方法使用的同时，限制了一部分内容，在这一层面上，它又像是一种设计模式。因此，不妨将 Redux 理解成一个严格规定了使用模式的库。</p>
-        
-        
-          <p class="article-more-link">
-            <a href="/2019/09/29/初识Redux/#more">查看更多</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/初识Redux/" data-title="初识Redux" data-id="ckg20rxbg000abovx4nth8nd4" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redux/">Redux</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-一些原生小方法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/09/29/一些原生小方法/" class="article-date">
-  <time datetime="2019-09-29T07:59:45.735Z" itemprop="datePublished">2019-09-29</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/29/一些原生小方法/">一些原生小方法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-          <ul>
-<li>addClass<br>往node或者nodelist中添加class<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addClass</span>(<span class="params">$els, classNames</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">addOneClass</span>(<span class="params">$el, classNames</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> resultClass = $el.className.split(<span class="string">" "</span>);</span><br><span class="line">        <span class="keyword">var</span> newClassNames = classNames.split(<span class="string">" "</span>);</span><br><span class="line">        newClassNames.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">newClass</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (resultClass.indexOf(newClass) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                resultClass.push(newClass);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        $el.className = resultClass.join(<span class="string">" "</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ($els <span class="keyword">instanceof</span> Node) &#123;</span><br><span class="line">        addOneClass($els, classNames);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; $els.length; i++) &#123;</span><br><span class="line">            addOneClass($els[i], classNames);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-        
-        
-          <p class="article-more-link">
-            <a href="/2019/09/29/一些原生小方法/#more">查看更多</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://yuzhounanhai.github.io/2019/09/29/一些原生小方法/" data-title="一些原生小方法" data-id="ckg20rxbb0005bovx7elw8i6a" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS/">JS</a></li></ul>
 
     </footer>
   </div>
@@ -612,7 +606,7 @@
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">下一页 &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">下一页 &raquo;</a>
   </nav>
 
 </section>
@@ -624,7 +618,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/其他/">其他</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络通信/">网络通信</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP/">HTTP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/其他/">其他</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络通信/">网络通信</a></li></ul>
     </div>
   </div>
 
@@ -634,7 +628,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/">JS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LeetCode解题/">LeetCode解题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TS/">TS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Webpack/">Webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react-dom/">react-dom</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react-reconciler/">react-reconciler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原理/">原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cookie/">Cookie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/">JS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LeetCode解题/">LeetCode解题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TS/">TS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Webpack/">Webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react-dom/">react-dom</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react-reconciler/">react-reconciler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原理/">原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/回溯/">回溯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/跨域/">跨域</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/跨站/">跨站</a></li></ul>
     </div>
   </div>
 
@@ -644,7 +638,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JS/" style="font-size: 20px;">JS</a> <a href="/tags/LeetCode解题/" style="font-size: 12.5px;">LeetCode解题</a> <a href="/tags/React/" style="font-size: 17.5px;">React</a> <a href="/tags/Redux/" style="font-size: 12.5px;">Redux</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/http/" style="font-size: 15px;">http</a> <a href="/tags/react-dom/" style="font-size: 10px;">react-dom</a> <a href="/tags/react-reconciler/" style="font-size: 10px;">react-reconciler</a> <a href="/tags/原理/" style="font-size: 17.5px;">原理</a> <a href="/tags/笔记/" style="font-size: 12.5px;">笔记</a>
+      <a href="/tags/Cookie/" style="font-size: 10px;">Cookie</a> <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/JS/" style="font-size: 20px;">JS</a> <a href="/tags/LeetCode解题/" style="font-size: 12.5px;">LeetCode解题</a> <a href="/tags/React/" style="font-size: 17.5px;">React</a> <a href="/tags/Redux/" style="font-size: 12.5px;">Redux</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/http/" style="font-size: 15px;">http</a> <a href="/tags/react-dom/" style="font-size: 10px;">react-dom</a> <a href="/tags/react-reconciler/" style="font-size: 10px;">react-reconciler</a> <a href="/tags/原理/" style="font-size: 17.5px;">原理</a> <a href="/tags/回溯/" style="font-size: 10px;">回溯</a> <a href="/tags/笔记/" style="font-size: 12.5px;">笔记</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/跨站/" style="font-size: 10px;">跨站</a>
     </div>
   </div>
 
@@ -653,7 +647,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">十月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li></ul>
     </div>
   </div>
 
@@ -666,6 +660,14 @@
       <ul>
         
           <li>
+            <a href="/2020/11/17/跨域、跨站Cookie的简单理解/">跨域、跨站Cookie的简单理解</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/23/回溯法/">回溯法</a>
+          </li>
+        
+          <li>
             <a href="/2020/09/25/自定义React渲染器/">自定义React渲染器</a>
           </li>
         
@@ -675,14 +677,6 @@
         
           <li>
             <a href="/2019/09/29/简单实现虚拟Dom与Diff算法/">简单实现虚拟DOM与Diff算法</a>
-          </li>
-        
-          <li>
-            <a href="/2019/09/29/深入了解AJAX/">深入了解AJAX</a>
-          </li>
-        
-          <li>
-            <a href="/2019/09/29/浅析VUE双向绑定原理/">浅析VUE双向绑定原理</a>
           </li>
         
       </ul>
